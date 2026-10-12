@@ -1,0 +1,35 @@
+services:
+  api:
+    build: .
+    command: [pnpm, api]
+    restart: unless-stopped
+    ports: ["127.0.0.1:8787:8787"]
+    environment:
+      API_HOST: 0.0.0.0
+      DB_PATH: /app/data/sol-signal.sqlite
+    volumes: ["signal-data:/app/data"]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:8787/api/snapshot').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  worker:
+    build: .
+    command: [pnpm, worker]
+    restart: unless-stopped
+    environment:
+      DB_PATH: /app/data/sol-signal.sqlite
+      HELIUS_API_KEY: ${HELIUS_API_KEY:-}
+      SOLANA_RPC_URL: ${SOLANA_RPC_URL:-https://api.mainnet-beta.solana.com}
+      SOLANA_WS_URL: ${SOLANA_WS_URL:-wss://api.mainnet-beta.solana.com}
+      RPC_REQUEST_INTERVAL_MS: ${RPC_REQUEST_INTERVAL_MS:-500}
+      RPC_DAILY_REQUEST_LIMIT: ${RPC_DAILY_REQUEST_LIMIT:-20000}
+      GRAPH_BLOCKED_ADDRESSES: ${GRAPH_BLOCKED_ADDRESSES:-}
+    volumes: ["signal-data:/app/data"]
+    healthcheck:
+      test: [CMD, node, -e, "const {DatabaseSync}=require('node:sqlite');const db=new DatabaseSync('/app/data/sol-signal.sqlite');const r=db.prepare('SELECT value FROM kv WHERE key=?').get('health');const h=r?JSON.parse(r.value):{};process.exit(Date.now()-h.heartbeat<30000?0:1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+volumes:
+  signal-data:

@@ -1,0 +1,162 @@
+{
+  "generatedAt": "2026-10-12T12:49:42.630Z",
+  "historical": {
+    "transactions": 15,
+    "verifiedBuys": 1,
+    "entries": 0,
+    "reason": "no executable quotes, circulation or full coverage: entries correctly blocked",
+    "totalReplayMs": 12.22095800000001,
+    "missedTransactions": "unknown; no independent ground-truth index supplied",
+    "misTriggers": "no strategy entry under missing data; parser false negatives not measured",
+    "results": [
+      {
+        "signature": "2JJ9LLZhHxWqvZG43EWPftE6djrSb2xobCaXbVifXX2Gek9iGLUaVLduyrFHB626MQtT38RF9LXttvCHbUiSSaRN",
+        "blockTime": 1791803680,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 1.2631659999999982,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "3BnYS5nBGHvrXm7FgkXR5sdUgvmegwPtMknJshAWAeoQHSfRyseTibaUZiT1mhkJL5P9mFNrZCaHUeuozx1RmTyE",
+        "blockTime": 1791799891,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.6800829999999962,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "3Jf7FJFbHQXNdBMWD9YZ7yR2KAN29LhPEfeytibSpvQMPk9Zge5fNLtW3BFCjBuNQKdfAZe5JUiQMU4h8oZAcHSM",
+        "blockTime": 1791808027,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.06591600000000142,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "3zofR342nJCGJ2biYhCHokw28carZBNivEzLs82fmF3jK9BM23TTN9nPnbnWyhxGmBVeUAK7oUCiqGyukdbGCMDP",
+        "blockTime": 1791808025,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.04862500000000125,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "43wcxtwZBp1ELZN192nxjguFD31s46QJ32CZz9gpfcjiLN3knjNQg6FGWNSwwth9p6MmsYV83qHeBSkNj7z6yiYD",
+        "blockTime": 1791807443,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.131416999999999,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "4nTMcGBYynX84a3xmWhSSMgcjynmcFAbzA9d9mv851opPH644GvjW6q3ueCcpurhVoKDvcWiUkPTMKiZt9NUSq5g",
+        "blockTime": 1791807422,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.09804200000000662,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "4t3ixa1zAU3EVV29vGA9enUpn5ps68cEzSij4GvQGXPsuhNo4TuEjpVAYziaMMHmcbkoYruHk5MZ2Pm9HGjH6v8z",
+        "blockTime": 1791808483,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 1.8968330000000009,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "4uMAvfS6of82KgwS37SGZaqwwVkpeUo4mpGU9pE1WKjGriKHTpjtM21z5yCbfQVTMJAfsZtXFJhdHfW58brVNnzX",
+        "blockTime": 1791799870,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.08995799999999576,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "559xXrqM31bVBaCGvwNrtjuYG1CWHXYXRmbiaWECE7VE65ZT1y6Taw7dVczhgNTPjhmi8GgUcrKkghVGdt9EJpPs",
+        "blockTime": 1791803678,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.2918330000000111,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "5XmTEgkbLuSdSt4444WHk63NqMQd6SBd7YSQAVuCbWGPd6K21k8xJ14awEHBAkgMjVAssx8AwNEGzyJizh2fdnt4",
+        "blockTime": 1791807486,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.0871659999999963,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "5jL3Uq8pb3kXSoaV6C54EmvTNZakzHeoMLBCyGaYztbhB1A3fsAZkXY4CLrMdFqoj1iQ4JiH1gR1ihgx2q6ECprn",
+        "blockTime": 1791803417,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.2844159999999931,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "E5CqmxSjLmS2udkk6TnEqMkqEfz6ULhDsAQnT78gDbRG94jM4v79DqTTBxF7k4ZyJptCfmcoYA97HXZZvbWtsMi",
+        "blockTime": 1791807477,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.05741700000000094,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "Kmw5N8wBMKvx9D5zSoSPVUPbhsSYWvxcfxsY72sZBfRoMn989e2tu42Br7TnsuhjKXpUHx5V8y2mfVeCBkUjVTG",
+        "blockTime": 1791803434,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.2714169999999996,
+        "reason": "no supported verified SOL swap buy"
+      },
+      {
+        "signature": "oXpJso1AxGqRDokEsu79nvviX6mzbE4oYEqi1wThXYRBRBC21b4xgcUJV9cYNcd5KvnjTm8LeJv9BmVgLQtq2og",
+        "blockTime": 1791808119,
+        "buys": 1,
+        "protocols": [
+          "pumpswap"
+        ],
+        "decodeMs": 1.0779169999999993,
+        "reason": "verified protocol buy"
+      },
+      {
+        "signature": "yUrGLkTbXzYhCScpaiydLKLKNXXBTdgtYMSjxz5hcxnXe4r3uuVNVw5XFUq6V66MiuzdXTNjFkendx2mSf8wY8z",
+        "blockTime": 1791808336,
+        "buys": 0,
+        "protocols": [],
+        "decodeMs": 0.260666999999998,
+        "reason": "no supported verified SOL swap buy"
+      }
+    ]
+  },
+  "synthetic": {
+    "label": "DEMO; not historical profitability evidence",
+    "decisions": [
+      {
+        "kind": "entry",
+        "reason": "tracked buy with verified quote, circulation and coverage"
+      },
+      {
+        "kind": "ignore",
+        "reason": "hold"
+      },
+      {
+        "kind": "ignore",
+        "reason": "hold"
+      },
+      {
+        "kind": "ignore",
+        "reason": "hold"
+      },
+      {
+        "kind": "exit",
+        "reason": "unknown buyer protective exit"
+      }
+    ],
+    "closedPositions": 1
+  }
+}
