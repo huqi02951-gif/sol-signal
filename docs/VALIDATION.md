@@ -22,3 +22,8 @@
 - 生产免费RPC吞吐不足不能用程序修复；候选池订阅已收窄为LIVE持仓池。调试阶段捕获的其他池jobs保留为deferred，不删除证据。
 
 使用技能：engineering-change-discipline → tdd（策略/持久化/API行为）与 redesign-existing-projects（原型迁移及状态完善）。没有调用逐交易大模型。代理实际token/cost平台未提供。
+
+## 第一轮审查修正（2026-10-12）
+最终41测试/15文件、构建、历史回放通过，生产依赖audit零已知漏洞。详见REVIEW_ROUND1.md、PRESSURE_REPORT.json、ROUND1_METRICS_SAMPLE.json。本轮启动72h独立采集，未完成72h；用户确认暂时无报价Key/供给，继续免费只读，LIVE入场保持关闭。初版17测试记录是当时结果，不代表当前数量。
+
+2026-10-12 本轮最终检查：16个测试文件/43项通过，TypeScript与Vite通过。AI两项集成测试只使用模拟模型响应，无真实Key调用；网页已检查默认关闭与禁用按钮。主网延迟样本见ROUND1_METRICS_SAMPLE.json，不代表72h通过。

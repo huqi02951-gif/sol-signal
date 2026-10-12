@@ -3,17 +3,35 @@ import WebSocket from 'ws';
 import {randomUUID} from 'node:crypto';
 import {Store,type Job} from '../../../packages/storage/src/index';
 import {WALLETS,type Swap} from '../../../packages/shared/src/index';
-import {recordTransfers} from '../../../packages/graph/src/index';
-import {parseTransaction,PROGRAMS} from './parser';
+import {recordTransfers,analyzeFunding} from '../../../packages/graph/src/index';
+import {PROGRAMS} from './parser';
+import {processFetched} from './processor';
+import {Watches} from './watches';
+import {Market,type CoverageEvidence} from '../../../packages/market/src/index';
+import {reconcile} from './reconcile';
+import {readKnownHoldings} from './holdings';
 import {Rpc} from './rpc';
 const store=new Store();
 const key=process.env.HELIUS_API_KEY;
-const rpc=new Rpc(key?`https://mainnet.helius-rpc.com/?api-key=${encodeURIComponent(key)}`:process.env.SOLANA_RPC_URL||'https://api.mainnet-beta.solana.com',store,Number(process.env.RPC_REQUEST_INTERVAL_MS||500),Number(process.env.RPC_DAILY_REQUEST_LIMIT||20000));
+const rpc=new Rpc(key?`https://mainnet.helius-rpc.com/?api-key=${encodeURIComponent(key)}`:process.env.SOLANA_RPC_URL||'https://api.mainnet-beta.solana.com',store,Number(process.env.RPC_REQUEST_INTERVAL_MS||500),Number(process.env.RPC_DAILY_REQUEST_LIMIT||20000),{backupUrl:process.env.SOLANA_BACKUP_RPC_URL,concurrency:2});
+const watches=new Watches(store,Number(process.env.MAX_CANDIDATE_POOLS||2),Number(process.env.CANDIDATE_WATCH_SECONDS||300)*1000);
+const market=new Market(rpc,{jupiterKey:process.env.JUPITER_API_KEY,circulationFile:process.env.CIRCULATION_FILE});
+const auditUrl=process.env.AUDIT_RPC_URL;
+const primaryUrl=key?'https://mainnet.helius-rpc.com':process.env.SOLANA_RPC_URL||'https://api.mainnet-beta.solana.com';
+const independent=auditUrl&&new URL(auditUrl).hostname!==new URL(primaryUrl).hostname?new Rpc(auditUrl,store,1500,2000,{usageKey:'auditRpcUsage'}):null;
+store.set('monitorRunStartedAt',Date.now());
 const wsUrl=key?`wss://mainnet.helius-rpc.com/?api-key=${encodeURIComponent(key)}`:process.env.SOLANA_WS_URL||'wss://api.mainnet-beta.solana.com';
 let socket:WebSocket|undefined,stopping=false,attempt=0,requestId=1,lastPong=0,openedAt=0,lastSlotAt=0,slot=0,reconnectTimer:ReturnType<typeof setTimeout>|undefined;
 const requested=new Map<number,string>();const active=new Map<number,string>();const addresses=new Set(WALLETS);
 let connected=false,backfilling=false,gap=false,lastError:string|null=null;
-function report(){store.set('health',{connected,subscriptions:[...active.values()].filter(x=>x!=='slot'),walletSubscriptions:[...active.values()].filter(x=>WALLETS.includes(x)).length,slot,lastSlotAt,heartbeat:Date.now(),backfilling,gap,lastError,queue:store.jobCount([...addresses]),deferredQueue:store.jobCount()-store.jobCount([...addresses]),provider:key?'Helius standard':'Solana public',monitorEnabled:store.get('monitorEnabled',true),entryReady:false,entryBlockedReason:'circulating supply, executable quote and complete pool coverage are not yet validated'});}
+function healthy(){return connected&&WALLETS.every(w=>[...active.values()].includes(w))&&Date.now()-lastSlotAt<30000&&!gap&&!lastError&&store.jobCount([...addresses])<100;}
+function report(){const quotes=watches.list().map(w=>store.get<import('../../../packages/shared/src/index').Quote|null>('quote:'+w.mint,null));const entryReady=healthy()&&quotes.some(q=>q?.coverageComplete&&Date.now()-q.time<15000);store.set('health',{connected,subscriptions:[...active.values()].filter(x=>x!=='slot'),walletSubscriptions:[...active.values()].filter(x=>WALLETS.includes(x)).length,slot,lastSlotAt,heartbeat:Date.now(),backfilling,gap,lastError,queue:store.jobCount([...addresses]),deferredQueue:store.jobCount()-store.jobCount([...addresses]),rpcScheduler:rpc.stats(),provider:key?'Helius standard':'Solana public',monitorEnabled:store.get('monitorEnabled',true),entryReady,entryBlockedReason:entryReady?null:'verified circulation, executable quote, complete pool/window evidence or queue health missing',watches:watches.list(),reconciliation:store.get('reconciliation',null)});}
+function syncWatches(){
+ const wanted=new Set([...WALLETS,...watches.list().map(w=>w.pool)]);
+ for(const a of addresses)if(!wanted.has(a)){addresses.delete(a);const sub=[...active].find(([,address])=>address===a);if(sub&&socket?.readyState===WebSocket.OPEN){socket.send(JSON.stringify({jsonrpc:'2.0',id:requestId++,method:'logsUnsubscribe',params:[sub[0]]}));active.delete(sub[0]);}}
+ for(const a of wanted){addresses.add(a);subscribe(a);}
+}
+
 let lastFaultAt=0;function fault(reason:string){const repeat=lastError===reason&&Date.now()-lastFaultAt<60000;lastError=reason;if(repeat){report();return;}lastFaultAt=Date.now();store.event({id:randomUUID(),kind:'worker_error',time:Date.now(),provenance:'LIVE',detail:{reason}});report();}
 function subscribe(address:string){if(!socket||socket.readyState!==WebSocket.OPEN||[...requested.values(),...active.values()].includes(address))return;const id=requestId++;requested.set(id,address);socket.send(JSON.stringify({jsonrpc:'2.0',id,method:address==='slot'?'slotSubscribe':'logsSubscribe',params:address==='slot'?[]:[{mentions:[address]},{commitment:'confirmed'}]}));}
 function connect(){
@@ -29,6 +47,7 @@ function connect(){
    if(msg.method==='slotNotification'){slot=msg.params.result.slot;lastSlotAt=Date.now();return;}
    if(msg.method!=='logsNotification')return;
    const result=msg.params.result;const source=active.get(msg.params.subscription);if(!source)return;
+   store.receipt(result.value.signature,source,Date.now(),result.context.slot);
    if(result.value.err){store.event({id:result.value.signature+':failed',kind:'failed_transaction',time:Date.now(),signature:result.value.signature,provenance:'LIVE',detail:{slot:result.context.slot}});return;}
    store.enqueue({signature:result.value.signature,slot:result.context.slot,seen:Date.now(),source,provenance:'LIVE'});
   }catch{fault('invalid websocket message');}
@@ -49,29 +68,23 @@ async function backfill(address:string){
  store.set('backfill:'+address,{checkedAt:Date.now(),count:list.length,firstScan:!cursor});
 }
 async function handle(job:Job){
- const tx=await rpc.call<unknown>('getTransaction',[job.signature,{encoding:'jsonParsed',commitment:'confirmed',maxSupportedTransactionVersion:0}]);
+ const tx=await rpc.call<unknown>('getTransaction',[job.signature,{encoding:'jsonParsed',commitment:'confirmed',maxSupportedTransactionVersion:0}],job.source.startsWith('backfill:')?'background':'live');
  if(!tx){store.retry(job);if(job.attempts===4)fault('transaction unavailable; retry retained');return;}
- const parsed=parseTransaction(tx,job.provenance,job.seen);if((tx as {transaction:{signatures:string[]}}).transaction.signatures[0]!==job.signature)throw new Error('RPC signature mismatch');
- // Apply before marking the durable job complete: retries deduplicate committed swaps.
- for(const swap of parsed.swaps)store.apply({...swap,ingestion:job.source.startsWith('backfill:')?'backfill':'websocket'},null,false);
- for(const p of parsed.pools){if(store.positions().some(x=>x.mint===p.mint&&x.provenance==='LIVE'&&x.status==='open')){addresses.add(p.pool);subscribe(p.pool);}const tokens=store.get<Record<string,unknown>>('tokens',{});tokens[p.mint]={...p,updatedAt:Date.now(),sourceSignature:job.signature,provenance:job.provenance,coverage:'partial',marketCapUsd:null};store.set('tokens',tokens);}
- store.transaction(()=>{
-  store.saveRaw(job.signature,job.slot,Date.now(),tx);
-  store.event({id:job.signature+':parsed',kind:'transaction',time:job.seen,signature:job.signature,provenance:job.provenance,detail:{slot:job.slot,reason:parsed.reason,buys:parsed.swaps.length,source:job.source.replace(/^backfill:/,''),ingestion:job.source.startsWith('backfill:')?'backfill':'websocket',blockTime:(tx as {blockTime:number|null}).blockTime}});
- });
- // Slow graph tasks are drained outside swap processing.
- store.set('graph:'+job.signature,{signature:job.signature,time:(tx as {blockTime:number|null}).blockTime?Number((tx as {blockTime:number}).blockTime)*1000:job.seen,transfers:parsed.transfers,provenance:job.provenance});
+ processFetched(store,job,tx,Date.now(),watches,healthy());syncWatches();
 }
-let busy=false;async function drain(){if(busy||stopping||!store.get('monitorEnabled',true))return;busy=true;try{for(const job of store.jobs([...addresses])){if(stopping||!store.get('monitorEnabled',true))break;try{await handle(job);}catch(e){store.retry(job);const message=e instanceof Error&&/^RPC |^daily RPC/.test(e.message)?e.message:'transaction fetch/parse failed';fault(message+'; durable retry scheduled');}}}finally{busy=false;report();}}
-let scanning=false;async function scan(){if(scanning||stopping||!store.get('monitorEnabled',true))return;scanning=true;backfilling=true;report();try{for(const a of addresses){if(stopping||!store.get('monitorEnabled',true))break;await backfill(a);}lastError=null;}catch{fault('backfill RPC unavailable or budget exhausted');}finally{scanning=false;backfilling=false;report();}}
-let checking=false;async function finalize(){if(checking||stopping)return;checking=true;try{const swaps=store.swaps(500).filter(s=>s.commitment==='confirmed'&&s.provenance!=='DEMO');const signatures=[...new Set(swaps.map(s=>s.signature))].slice(0,100);if(!signatures.length)return;const statuses=await rpc.call<{value:Array<{err:unknown;confirmationStatus:string}|null>}>('getSignatureStatuses',[signatures,{searchTransactionHistory:true}]);statuses.value.forEach((s,i)=>{if(s?.err||s?.confirmationStatus==='finalized')store.finalize(signatures[i],!!s.err);});}catch{fault('finality check unavailable');}finally{checking=false;}}
-function graph(){const rows=store.db.prepare("SELECT key,value FROM kv WHERE key LIKE 'graph:%' LIMIT 10").all();const blocked=new Set([...PROGRAMS,...addresses].filter(a=>!WALLETS.includes(a)).concat((process.env.GRAPH_BLOCKED_ADDRESSES||'').split(',').filter(Boolean)));for(const row of rows){const g=JSON.parse(String(row.value));recordTransfers(store,g.signature,g.time,g.transfers,blocked,g.provenance);store.db.prepare('DELETE FROM kv WHERE key=?').run(String(row.key));}}
-// Restore only open-position pools. Candidate history is not a mandate to stream all pools.
-const tokens=store.get<Record<string,{pool:string}>>('tokens',{});
-for(const position of store.positions())if(position.provenance==='LIVE'&&position.status==='open'&&tokens[position.mint])addresses.add(tokens[position.mint].pool);
+let busy=false;async function drain(){if(busy||stopping||!store.get('monitorEnabled',true))return;busy=true;const claimed=new Set<string>();let processed=0;async function runner(){while(processed<20){if(stopping||!store.get('monitorEnabled',true))break;const job=store.jobs([...addresses]).find(j=>!claimed.has(j.signature));if(!job)break;claimed.add(job.signature);processed++;try{await handle(job);}catch(e){store.retry(job);const message=e instanceof Error&&/^RPC |^daily RPC/.test(e.message)?e.message:'transaction fetch/parse failed';fault(message+'; durable retry scheduled');}}}try{await Promise.all([runner(),runner()]);}finally{busy=false;report();}}
 
-connect();void scan();
-const timers=[setInterval(()=>{const enabled=store.get('monitorEnabled',true);if(!enabled&&connected)socket?.close();if(enabled&&!connected&&!reconnectTimer&&socket?.readyState!==WebSocket.CONNECTING)connect();if(connected&&socket){if(Date.now()-lastPong>60000||Date.now()-(lastSlotAt||openedAt)>60000){fault('websocket heartbeat stale');socket.terminate();}else socket.ping();}report();},10000),setInterval(()=>void drain(),1000),setInterval(()=>void scan(),60000),setInterval(()=>void finalize(),30000),setInterval(graph,5000)];
+let scanning=false;async function scan(){if(scanning||stopping||!store.get('monitorEnabled',true))return;scanning=true;backfilling=true;report();try{for(const a of addresses){if(stopping||!store.get('monitorEnabled',true))break;await backfill(a);}lastError=null;}catch(e){const message=e instanceof Error&&/^RPC |^daily RPC/.test(e.message)?e.message:'backfill RPC unavailable';fault(message);}finally{scanning=false;backfilling=false;report();}}
+let checking=false;async function finalize(){if(checking||stopping)return;checking=true;try{const swaps=store.swaps(500).filter(s=>s.commitment==='confirmed'&&s.provenance!=='DEMO');const signatures=[...new Set(swaps.map(s=>s.signature))].slice(0,100);if(!signatures.length)return;const statuses=await rpc.call<{value:Array<{err:unknown;confirmationStatus:string}|null>}>('getSignatureStatuses',[signatures,{searchTransactionHistory:true}]);statuses.value.forEach((s,i)=>{if(s?.err||s?.confirmationStatus==='finalized')store.finalize(signatures[i],!!s.err);});}catch{fault('finality check unavailable');}finally{checking=false;}}
+function graph(){const rows=store.db.prepare("SELECT key,value FROM kv WHERE key LIKE 'graph:%' LIMIT 10").all();const blocked=new Set([...PROGRAMS,...addresses].filter(a=>!WALLETS.includes(a)).concat((process.env.GRAPH_BLOCKED_ADDRESSES||'').split(',').filter(Boolean)));for(const row of rows){const g=JSON.parse(String(row.value));recordTransfers(store,g.signature,g.time,g.transfers,blocked,g.provenance);store.db.prepare('DELETE FROM kv WHERE key=?').run(String(row.key));}store.set('fundingAnalysis',analyzeFunding(store.relations(),WALLETS,store.settings().value.publicServices.map(a=>a.address)));}
+// Candidate windows are bounded; open position pools remain pinned across restart.
+for(const w of watches.list())addresses.add(w.pool);
+let pricing=false;async function refreshMarket(){if(pricing||stopping||!store.get('monitorEnabled',true))return;pricing=true;try{for(const w of watches.list()){const position=store.positions().find(p=>p.mint===w.mint&&p.provenance==='LIVE'&&p.status==='open')??null;const coverage=store.get<CoverageEvidence|null>('coverage:'+w.mint,null);const result=await market.observe(w.mint,store.settings().value.paperBuySizeSol,slot,coverage,position);store.set('market:'+w.mint,result);store.set('quote:'+w.mint,result.quote);if(position&&result.quote)store.markQuote(result.quote);}}finally{pricing=false;report();}}
+let readingHoldings=false;async function holdings(){if(readingHoldings||stopping||!healthy())return;readingHoldings=true;try{for(const w of watches.list()){const owners=[...WALLETS,...store.settings().value.excluded.map(x=>x.address)].filter(a=>!store.settings().value.publicServices.some(p=>p.address===a));store.set('holdings:'+w.mint,await readKnownHoldings(rpc,w.mint,owners));}}finally{readingHoldings=false;}}
+let auditing=false;async function audit(){if(auditing||stopping)return;auditing=true;try{await reconcile(store,independent,auditUrl?'independent RPC':'not configured');}finally{auditing=false;}}
+
+connect();void scan();void audit();
+const timers=[setInterval(()=>{const enabled=store.get('monitorEnabled',true);if(!enabled&&connected)socket?.close();if(enabled&&!connected&&!reconnectTimer&&socket?.readyState!==WebSocket.CONNECTING)connect();if(connected&&socket){if(Date.now()-lastPong>60000||Date.now()-(lastSlotAt||openedAt)>60000){fault('websocket heartbeat stale');socket.terminate();}else socket.ping();}report();syncWatches();},10000),setInterval(()=>void drain(),1000),setInterval(()=>void scan(),60000),setInterval(()=>void finalize(),30000),setInterval(graph,5000),setInterval(()=>void refreshMarket(),10000),setInterval(()=>void audit(),900000),setInterval(()=>void holdings(),60000)];
 function shutdown(){stopping=true;timers.forEach(clearInterval);if(reconnectTimer)clearTimeout(reconnectTimer);socket?.close();store.set('health',{...store.get('health',{}),connected:false,heartbeat:Date.now(),lastError:'worker stopped'});setTimeout(()=>process.exit(0),1000).unref();}
 process.on('SIGINT',shutdown);process.on('SIGTERM',shutdown);
 console.log('SOL SIGNAL worker started: read-only PAPER mode; keys are not logged.');

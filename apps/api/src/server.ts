@@ -5,9 +5,13 @@ import {resolve} from 'node:path';
 import {z} from 'zod';
 import {WALLETS,settingsSchema} from '../../../packages/shared/src/index';
 import {Store} from '../../../packages/storage/src/index';
+import {summarizeTimings} from '../../../packages/shared/src/telemetry';
+import {buyerSummary} from '../../../packages/shared/src/buyers';
 import {runDemo} from '../../../packages/strategy/src/demo';
+import {ManualAi,type AiOptions} from './ai';
 function quantile(xs:number[],q:number){if(!xs.length)return null;const a=[...xs].sort((a,b)=>a-b);return a[Math.ceil(q*a.length)-1];}
-export function createServer(store:Store,port=8787){
+export function createServer(store:Store,port=8787,aiOptions:AiOptions={}){
+ const ai=new ManualAi(store,aiOptions);
  const app=Fastify({logger:false,bodyLimit:64*1024});
  const hosts=new Set([`localhost:${port}`,`127.0.0.1:${port}`,...(process.env.API_ALLOWED_HOSTS||'').split(',').filter(Boolean)]);
  app.addHook('onRequest',async(req,reply)=>{
@@ -21,11 +25,14 @@ export function createServer(store:Store,port=8787){
  function snapshot(){
   const h=store.get<Record<string,unknown>>('health',{});const heartbeat=Number(h.heartbeat||0);const stale=Date.now()-heartbeat>20000;const swaps=store.swaps(300);const live=swaps.filter(s=>s.provenance==='LIVE'&&s.ingestion==='websocket');
   const delays=live.filter(s=>s.time>0&&s.receivedAt>=s.time).map(s=>s.receivedAt-s.time);
-  return {mode:'PAPER / SIMULATION',updatedAt:Date.now(),settings:store.settings(),wallets:WALLETS.map((address,i)=>({address,alias:'钱包 '+String.fromCharCode(65+i),subscribed:!stale&&((h.subscriptions as string[]|undefined)||[]).includes(address),lastTransaction:store.events(500).find(e=>e.kind==='transaction'&&(e.detail as {source:string}).source===address)})),health:{...h,stale,connected:!stale&&h.connected===true,p50:quantile(delays,.5),p95:quantile(delays,.95),latencyDefinition:'blockTime → logs receipt; blockTime has second-level precision; excludes HISTORY/DEMO',latencySamples:delays.length,rpcUsage:store.get('rpcUsage',null),backfills:WALLETS.map(a=>store.get('backfill:'+a,null)),entryReady:false},tokens:Object.values(store.get('tokens',{})),positions:store.positions(),events:store.events(),swaps,graph:store.relations()};
+  return {mode:'PAPER / SIMULATION',updatedAt:Date.now(),settings:store.settings(),wallets:WALLETS.map((address,i)=>({address,alias:'钱包 '+String.fromCharCode(65+i),subscribed:!stale&&((h.subscriptions as string[]|undefined)||[]).includes(address),lastTransaction:store.events(500).find(e=>e.kind==='transaction'&&(e.detail as {source:string}).source===address)})),health:{...h,stale,connected:!stale&&h.connected===true,p50:quantile(delays,.5),p95:quantile(delays,.95),latencyDefinition:'blockTime → logs receipt; blockTime has second-level precision; excludes HISTORY/DEMO',latencySamples:delays.length,latencies:summarizeTimings(store.timings()),soak:store.get('soak',null),rpcUsage:store.get('rpcUsage',null),backfills:WALLETS.map(a=>store.get('backfill:'+a,null)),entryReady:!stale&&h.entryReady===true},market:store.db.prepare("SELECT value FROM kv WHERE key LIKE 'market:%'").all().map(r=>JSON.parse(String(r.value))),buyers:buyerSummary(swaps,store.settings().value,Object.fromEntries(store.db.prepare("SELECT key,value FROM kv WHERE key LIKE 'holdings:%'").all().map(r=>[String(r.key).slice(9),JSON.parse(String(r.value))]))),tokens:Object.values(store.get('tokens',{})),positions:store.positionHistory(),events:store.events(),swaps,graph:store.relations(),fundingAnalysis:store.get('fundingAnalysis',null)};
  }
  app.get('/api/snapshot',async()=>snapshot());
  app.get('/api/health',async(_req,reply)=>{const h=snapshot().health;if(!h.connected)reply.code(503);return h;});
+ app.get('/api/metrics',async()=>({latencies:summarizeTimings(store.timings()),reconciliation:store.get('reconciliation',null),soak:store.get('soak',null)}));
  app.get('/api/settings/audit',async()=>store.audit());
+ app.get('/api/ai/status',async()=>ai.status());
+ app.post('/api/ai/summary',async(req,reply)=>{z.object({}).strict().parse(req.body);const result=await ai.summary();return reply.code(result.status).send(result.body);});
  app.put('/api/settings',async(req,reply)=>{
   const input=z.object({expectedVersion:z.number().int().positive(),value:settingsSchema}).strict().parse(req.body);
   const saved=store.transaction(()=>{if(store.settings().version!==input.expectedVersion)return null;store.saveSettings(input.value);return store.settings();});

@@ -6,10 +6,10 @@ export const settingsSchema = z.object({
  minMarketCapUsd: decimal, paperBuySizeSol: decimal, entryExternalBuyCapSol: decimal,
  exitExternalSingleBuySol: decimal, netTakeProfitPct: decimal,
  entryWindowSeconds: z.number().int().min(1).max(3600), unknownTriggersExit: z.boolean(),
- monitoring: z.boolean(), excluded: z.array(z.object({address, evidence: z.string().min(10).max(500)})).max(500)
+ monitoring: z.boolean(), suspected: z.array(z.object({address,evidence:z.string().min(10).max(500)})).max(500).default([]), excludeSuspected:z.boolean().default(false), publicServices:z.array(z.object({address,evidence:z.string().min(10).max(500)})).max(500).default([]), excluded: z.array(z.object({address, evidence: z.string().min(10).max(500)})).max(500)
 }).strict();
 export type Settings = z.infer<typeof settingsSchema>;
-export const defaults: Settings = {minMarketCapUsd:'250000',paperBuySizeSol:'0.1',entryExternalBuyCapSol:'1',exitExternalSingleBuySol:'2',netTakeProfitPct:'5',entryWindowSeconds:30,unknownTriggersExit:true,monitoring:true,excluded:[]};
+export const defaults: Settings = {minMarketCapUsd:'250000',paperBuySizeSol:'0.1',entryExternalBuyCapSol:'1',exitExternalSingleBuySol:'2',netTakeProfitPct:'5',entryWindowSeconds:30,unknownTriggersExit:true,monitoring:true,excluded:[],suspected:[],excludeSuspected:false,publicServices:[]};
 export type Provenance = 'LIVE' | 'HISTORY' | 'DEMO';
 export interface Swap {
  id: string; signature: string; index: number; slot: number; time: number; receivedAt: number;
@@ -21,7 +21,7 @@ export interface Quote {
  mint: string; time: number; provenance: Provenance; source: string;
  circulatingMarketCapUsd: string | null; circulationSource: string | null;
  tokenAmount: string; buyCostSol: string; sellProceedsSol: string;
- networkFeeSol: string; rentSol: string; slippageSol: string; coverageComplete: boolean;
+ networkFeeSol: string; rentSol: string; slippageSol: string; coverageComplete: boolean; evidence?:unknown;
 }
 export interface Position {
  id: string; mint: string; openedAt: number; openEvent: string; closedAt?: number; closeEvent?: string;

@@ -6,6 +6,11 @@ services:
     ports: ["127.0.0.1:8787:8787"]
     environment:
       API_HOST: 0.0.0.0
+      AI_ENABLED: ${AI_ENABLED:-false}
+      AI_PROVIDER: ${AI_PROVIDER:-qwen}
+      AI_MODEL: ${AI_MODEL:-}
+      AI_API_KEY: ${AI_API_KEY:-}
+      AI_BASE_URL: ${AI_BASE_URL:-}
       DB_PATH: /app/data/sol-signal.sqlite
     volumes: ["signal-data:/app/data"]
     healthcheck:
@@ -25,6 +30,12 @@ services:
       RPC_REQUEST_INTERVAL_MS: ${RPC_REQUEST_INTERVAL_MS:-500}
       RPC_DAILY_REQUEST_LIMIT: ${RPC_DAILY_REQUEST_LIMIT:-20000}
       GRAPH_BLOCKED_ADDRESSES: ${GRAPH_BLOCKED_ADDRESSES:-}
+      SOLANA_BACKUP_RPC_URL: ${SOLANA_BACKUP_RPC_URL:-}
+      AUDIT_RPC_URL: ${AUDIT_RPC_URL:-}
+      MAX_CANDIDATE_POOLS: ${MAX_CANDIDATE_POOLS:-2}
+      CANDIDATE_WATCH_SECONDS: ${CANDIDATE_WATCH_SECONDS:-300}
+      JUPITER_API_KEY: ${JUPITER_API_KEY:-}
+      CIRCULATION_FILE: ${CIRCULATION_FILE:-}
     volumes: ["signal-data:/app/data"]
     healthcheck:
       test: [CMD, node, -e, "const {DatabaseSync}=require('node:sqlite');const db=new DatabaseSync('/app/data/sol-signal.sqlite');const r=db.prepare('SELECT value FROM kv WHERE key=?').get('health');const h=r?JSON.parse(r.value):{};process.exit(Date.now()-h.heartbeat<30000?0:1)"]

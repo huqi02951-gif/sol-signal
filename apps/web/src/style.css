@@ -11,3 +11,6 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}butt
 
 .wallet>span{white-space:nowrap;flex-shrink:0}
 @media(max-width:1050px){.app{grid-template-columns:minmax(0,1fr)}.sidebar{min-width:0;width:100%}}
+.state-line{margin:0 0 18px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}textarea{display:block;width:100%;min-height:120px;background:#0b141b;color:var(--text);border:1px solid var(--line);padding:10px;border-radius:8px;margin:8px 0;font:12px ui-monospace,monospace}
+
+.ai-summary{white-space:pre-wrap;overflow-wrap:anywhere}

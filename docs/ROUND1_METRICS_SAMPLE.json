@@ -1,0 +1,149 @@
+{
+  "latencies": {
+    "receive": {
+      "samples": 8,
+      "p50": 1227,
+      "p95": 1928,
+      "p99": 1928
+    },
+    "rpc": {
+      "samples": 8,
+      "p50": 1472,
+      "p95": 14577,
+      "p99": 14577
+    },
+    "parse": {
+      "samples": 8,
+      "p50": 1,
+      "p95": 13,
+      "p99": 13
+    },
+    "decision": {
+      "samples": 8,
+      "p50": 0,
+      "p95": 0,
+      "p99": 0
+    },
+    "endToEnd": {
+      "samples": 8,
+      "p50": 1475,
+      "p95": 14578,
+      "p99": 14578
+    },
+    "signal": {
+      "samples": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null
+    },
+    "definition": "receive uses second-resolution blockTime; other durations use local wall clock milliseconds; signal samples only actual PAPER entry/exit",
+    "window": 10
+  },
+  "reconciliation": {
+    "at": 1791817692386,
+    "status": "unavailable",
+    "reason": "independent RPC not configured",
+    "missRate": null
+  },
+  "soak": {
+    "runId": "2026-10-12T15-09-38.683Z",
+    "startedAt": 1791817778683,
+    "lastSampleAt": 1791818438703,
+    "targetHours": 72,
+    "elapsedMs": 660020,
+    "observedMs": 660020,
+    "consecutiveObservedMs": 660020,
+    "gapMs": 0,
+    "samples": 12,
+    "unhealthySamples": 0,
+    "subscriptionHealthy": true,
+    "health": {
+      "connected": true,
+      "subscriptions": [
+        "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+        "AVxhoCCEjdTfYjNm5FkRHCNGARFgv4GaNACpteyHLhr7",
+        "DgXZpa31edzYTm4piLYTCeEyfUjreB4G7gLaJ3dh7Xyf"
+      ],
+      "walletSubscriptions": 3,
+      "slot": 456094021,
+      "lastSlotAt": 1791818438073,
+      "heartbeat": 1791818438164,
+      "backfilling": false,
+      "gap": false,
+      "lastError": null,
+      "queue": 0,
+      "deferredQueue": 1814,
+      "rpcScheduler": {
+        "queued": 0,
+        "inFlight": 0,
+        "concurrency": 2,
+        "intervalMs": 500,
+        "backupConfigured": false,
+        "primaryCoolingDown": false
+      },
+      "provider": "Solana public",
+      "monitorEnabled": true,
+      "entryReady": false,
+      "entryBlockedReason": "verified circulation, executable quote, complete pool/window evidence or queue health missing",
+      "watches": [],
+      "reconciliation": {
+        "at": 1791817692386,
+        "status": "unavailable",
+        "reason": "independent RPC not configured",
+        "missRate": null
+      }
+    },
+    "latencies": {
+      "receive": {
+        "samples": 8,
+        "p50": 1227,
+        "p95": 1928,
+        "p99": 1928
+      },
+      "rpc": {
+        "samples": 8,
+        "p50": 1472,
+        "p95": 14577,
+        "p99": 14577
+      },
+      "parse": {
+        "samples": 8,
+        "p50": 1,
+        "p95": 13,
+        "p99": 13
+      },
+      "decision": {
+        "samples": 8,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "endToEnd": {
+        "samples": 8,
+        "p50": 1475,
+        "p95": 14578,
+        "p99": 14578
+      },
+      "signal": {
+        "samples": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "definition": "receive uses second-resolution blockTime; other durations use local wall clock milliseconds; signal samples only actual PAPER entry/exit",
+      "window": 10
+    },
+    "reconciliation": {
+      "at": 1791817692386,
+      "status": "unavailable",
+      "reason": "independent RPC not configured",
+      "missRate": null
+    },
+    "realPaperEntries": 0,
+    "status": "running",
+    "passed": false,
+    "reason": "72h continuous observation, independent reconciliation and real PAPER evidence must all be evaluated; running is not acceptance"
+  },
+  "capturedAt": "2026-10-12T23:21:00+08:00",
+  "limitations": "Small LIVE sample; zero actual PAPER signals; no independent provider; 72h not completed."
+}

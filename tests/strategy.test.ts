@@ -22,3 +22,14 @@ it('threshold changes apply immediately without rounding',()=>{
  expect(decide({...s,lamports:'2000100001'},defaults,p,[],null,1,true).kind).toBe('exit');
 });
 it('exit remains protective while new entries paused',()=>expect(decide(s,{...defaults,monitoring:false},p,[],null,1,false).kind).toBe('exit'));
+it('suspected exclusion is opt-in and public services never trigger protective exits',()=>{
+ expect(decide(s,{...defaults,suspected:[{address:s.owner,evidence:'weak transfer evidence'}]},p,[],null,1,true).kind).toBe('exit');
+ expect(decide(s,{...defaults,suspected:[{address:s.owner,evidence:'weak transfer evidence'}],excludeSuspected:true},p,[],null,1,true).kind).toBe('ignore');
+ expect(decide(s,{...defaults,publicServices:[{address:s.owner,evidence:'verified public service'}]},p,[],null,1,true).kind).toBe('ignore');
+});
+it('a queued observation from before real PAPER entry cannot retroactively trigger an exit',()=>{
+ expect(decide({...s,provenance:'LIVE',time:100000,receivedAt:100010},defaults,{...p,provenance:'LIVE',openedAt:100100},[],null,1,true,100200).kind).toBe('ignore');
+});
+it('supports configurable strict one-SOL and half-SOL thresholds',()=>{
+ for(const [limit,equal,above] of [['1','1000000000','1000000001'],['0.5','500000000','500000001']]){const settings={...defaults,exitExternalSingleBuySol:limit};expect(decide({...s,lamports:equal},settings,p,[],null,1,true).kind).toBe('ignore');expect(decide({...s,lamports:above},settings,p,[],null,1,true).kind).toBe('exit');}
+});

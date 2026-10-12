@@ -1,0 +1,30 @@
+{
+  "label": "SYNTHETIC LOAD; not production/mainnet latency",
+  "generatedAt": "2026-10-12T14:44:23.223Z",
+  "sameRateLimit": true,
+  "serial": {
+    "concurrency": 1,
+    "startIntervalMs": 5,
+    "simulatedTransportMs": 20,
+    "intakeBurst": 200,
+    "processed": 200,
+    "remaining": 0,
+    "durationMs": 4323.201959,
+    "maxInFlight": 1,
+    "rpcCompletedP95Ms": 413.178542,
+    "rawRows": 200
+  },
+  "parallel": {
+    "concurrency": 2,
+    "startIntervalMs": 5,
+    "simulatedTransportMs": 20,
+    "intakeBurst": 200,
+    "processed": 200,
+    "remaining": 0,
+    "durationMs": 2202.3687499999996,
+    "maxInFlight": 2,
+    "rpcCompletedP95Ms": 217.06770899999992,
+    "rawRows": 200
+  },
+  "warning": "production default remains 500ms between request starts; a 200-event burst at 2 RPS requires at least about 100 seconds, before retries"
+}

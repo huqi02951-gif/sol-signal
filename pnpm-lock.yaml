@@ -101,6 +101,8 @@ importers:
 
   packages/graph: {}
 
+  packages/market: {}
+
   packages/shared: {}
 
   packages/storage: {}

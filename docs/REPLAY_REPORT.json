@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-10-12T12:49:42.630Z",
+  "generatedAt": "2026-10-12T14:58:56.802Z",
   "historical": {
     "transactions": 15,
     "verifiedBuys": 1,
     "entries": 0,
     "reason": "no executable quotes, circulation or full coverage: entries correctly blocked",
-    "totalReplayMs": 12.22095800000001,
+    "totalReplayMs": 11.224582999999996,
     "missedTransactions": "unknown; no independent ground-truth index supplied",
     "misTriggers": "no strategy entry under missing data; parser false negatives not measured",
     "results": [
@@ -14,7 +14,7 @@
         "blockTime": 1791803680,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 1.2631659999999982,
+        "decodeMs": 0.9641660000000059,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -22,7 +22,7 @@
         "blockTime": 1791799891,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.6800829999999962,
+        "decodeMs": 0.18729199999999935,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -30,7 +30,7 @@
         "blockTime": 1791808027,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.06591600000000142,
+        "decodeMs": 0.053875000000005,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -38,7 +38,7 @@
         "blockTime": 1791808025,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.04862500000000125,
+        "decodeMs": 0.047167000000001735,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -46,7 +46,7 @@
         "blockTime": 1791807443,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.131416999999999,
+        "decodeMs": 0.10500000000000398,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -54,7 +54,7 @@
         "blockTime": 1791807422,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.09804200000000662,
+        "decodeMs": 0.09645799999999838,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -62,7 +62,7 @@
         "blockTime": 1791808483,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 1.8968330000000009,
+        "decodeMs": 2.019834000000003,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -70,7 +70,7 @@
         "blockTime": 1791799870,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.08995799999999576,
+        "decodeMs": 0.08941599999999994,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -78,7 +78,7 @@
         "blockTime": 1791803678,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.2918330000000111,
+        "decodeMs": 0.20666599999999846,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -86,7 +86,7 @@
         "blockTime": 1791807486,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.0871659999999963,
+        "decodeMs": 0.07604200000000105,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -94,7 +94,7 @@
         "blockTime": 1791803417,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.2844159999999931,
+        "decodeMs": 0.2632080000000059,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -102,7 +102,7 @@
         "blockTime": 1791807477,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.05741700000000094,
+        "decodeMs": 0.04679199999999639,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -110,7 +110,7 @@
         "blockTime": 1791803434,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.2714169999999996,
+        "decodeMs": 0.24129100000000392,
         "reason": "no supported verified SOL swap buy"
       },
       {
@@ -120,7 +120,7 @@
         "protocols": [
           "pumpswap"
         ],
-        "decodeMs": 1.0779169999999993,
+        "decodeMs": 1.0605410000000006,
         "reason": "verified protocol buy"
       },
       {
@@ -128,7 +128,7 @@
         "blockTime": 1791808336,
         "buys": 0,
         "protocols": [],
-        "decodeMs": 0.260666999999998,
+        "decodeMs": 0.24058300000000088,
         "reason": "no supported verified SOL swap buy"
       }
     ]

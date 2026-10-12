@@ -25,3 +25,22 @@ it('net take profit deducts costs and invalidates reverted source',()=>{
  expect(db.apply(n,{...q,time:101000,sellProceedsSol:'0.110'},true).kind).toBe('exit');
  db.finalize('entry',true);expect(db.positions()[0].status).toBe('invalidated');db.close();
 });
+it('uses decision-time quote freshness rather than rejecting all quotes obtained after blockTime',()=>{
+ const db=new Store(':memory:');const d=db.apply({...s,receivedAt:100500},{...q,time:101000},true,101100);
+ expect(d.kind).toBe('entry');expect(db.positions()[0].openedAt).toBe(101100);db.close();
+});
+it('does not enter from an old LIVE queue item despite a current quote',()=>{
+ const db=new Store(':memory:');expect(db.apply({...s,provenance:'LIVE'},{...q,provenance:'LIVE',time:200000},true,200001).reason).toContain('stale LIVE');db.close();
+});
+it('quote refresh can take profit without a new buy and retains prior paper fills after re-entry',()=>{
+ const db=new Store(':memory:');db.apply(s,q,true);
+ expect(db.markQuote({...q,time:101000,sellProceedsSol:'0.110'},101100).kind).toBe('exit');expect(db.markQuote({...q,time:101000,sellProceedsSol:'0.110'},101100).kind).toBe('ignore');
+ expect(db.apply({...s,id:'reentry',signature:'reentry',time:102000,receivedAt:102001},{...q,time:102000},true).kind).toBe('entry');
+ expect(db.positionHistory()).toHaveLength(2);expect(db.positions().filter(p=>p.status==='open')).toHaveLength(1);db.close();
+});
+it('a reverted archived fill does not invalidate a later valid position in the same mint',()=>{
+ const db=new Store(':memory:');db.apply(s,q,true);db.markQuote({...q,time:101000,sellProceedsSol:'0.110'},101100);db.apply({...s,id:'new',signature:'new',time:102000,receivedAt:102001},{...q,time:102000},true);db.finalize('entry',true);expect(db.positions()[0].status).toBe('open');expect(db.positionHistory().find(p=>p.id===s.id)?.status).toBe('invalidated');db.close();
+});
+it('a same-second external order cannot bypass the entry cap because blockTime is coarse',()=>{
+ const db=new Store(':memory:');db.apply({...s,id:'before',signature:'before',slot:0,owner:'other',lamports:'1000000001'},null,true);expect(db.apply(s,q,true).kind).toBe('ignore');db.close();
+});

@@ -15,7 +15,9 @@
     "typecheck": "tsc --noEmit",
     "build": "pnpm typecheck && pnpm --filter @sol/web build",
     "replay": "tsx scripts/replay.ts",
-    "history": "tsx scripts/history.ts"
+    "history": "tsx scripts/history.ts",
+    "soak": "tsx scripts/soak.ts",
+    "pressure": "tsx scripts/pressure.ts"
   },
   "dependencies": {
     "zod": "^4.1.0",
