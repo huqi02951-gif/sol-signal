@@ -1,0 +1,38 @@
+{
+  "name": "sol-signal",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.1.1",
+  "engines": {
+    "node": ">=22.17"
+  },
+  "scripts": {
+    "dev": "tsx scripts/dev.ts",
+    "api": "tsx apps/api/src/index.ts",
+    "worker": "tsx apps/worker/src/index.ts",
+    "web": "pnpm --filter @sol/web dev",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "build": "pnpm typecheck && pnpm --filter @sol/web build",
+    "replay": "tsx scripts/replay.ts",
+    "history": "tsx scripts/history.ts"
+  },
+  "dependencies": {
+    "zod": "^4.1.0",
+    "decimal.js": "^10.6.0",
+    "ws": "^8.18.3",
+    "bs58": "^6.0.0",
+    "dotenv": "^17.2.0",
+    "fastify": "^5.6.0",
+    "@fastify/static": "10.1.6"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0",
+    "@types/node": "^22.18.0",
+    "@types/ws": "^8.18.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0"
+  }
+}
