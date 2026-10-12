@@ -1,0 +1,143 @@
+{
+  "capturedAt": "2026-10-12T12:35:26.256Z",
+  "source": "Solana public",
+  "results": [
+    {
+      "wallet": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+      "signature": "4t3ixa1zAU3EVV29vGA9enUpn5ps68cEzSij4GvQGXPsuhNo4TuEjpVAYziaMMHmcbkoYruHk5MZ2Pm9HGjH6v8z",
+      "blockTime": 1791808483,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+      "signature": "yUrGLkTbXzYhCScpaiydLKLKNXXBTdgtYMSjxz5hcxnXe4r3uuVNVw5XFUq6V66MiuzdXTNjFkendx2mSf8wY8z",
+      "blockTime": 1791808336,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+      "signature": "oXpJso1AxGqRDokEsu79nvviX6mzbE4oYEqi1wThXYRBRBC21b4xgcUJV9cYNcd5KvnjTm8LeJv9BmVgLQtq2og",
+      "blockTime": 1791808119,
+      "buys": 1,
+      "reason": "verified protocol buy",
+      "status": "captured",
+      "protocols": [
+        "pumpswap"
+      ]
+    },
+    {
+      "wallet": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+      "signature": "3Jf7FJFbHQXNdBMWD9YZ7yR2KAN29LhPEfeytibSpvQMPk9Zge5fNLtW3BFCjBuNQKdfAZe5JUiQMU4h8oZAcHSM",
+      "blockTime": 1791808027,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+      "signature": "3zofR342nJCGJ2biYhCHokw28carZBNivEzLs82fmF3jK9BM23TTN9nPnbnWyhxGmBVeUAK7oUCiqGyukdbGCMDP",
+      "blockTime": 1791808025,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "AVxhoCCEjdTfYjNm5FkRHCNGARFgv4GaNACpteyHLhr7",
+      "signature": "5XmTEgkbLuSdSt4444WHk63NqMQd6SBd7YSQAVuCbWGPd6K21k8xJ14awEHBAkgMjVAssx8AwNEGzyJizh2fdnt4",
+      "blockTime": 1791807486,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "AVxhoCCEjdTfYjNm5FkRHCNGARFgv4GaNACpteyHLhr7",
+      "signature": "43wcxtwZBp1ELZN192nxjguFD31s46QJ32CZz9gpfcjiLN3knjNQg6FGWNSwwth9p6MmsYV83qHeBSkNj7z6yiYD",
+      "blockTime": 1791807443,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "AVxhoCCEjdTfYjNm5FkRHCNGARFgv4GaNACpteyHLhr7",
+      "signature": "559xXrqM31bVBaCGvwNrtjuYG1CWHXYXRmbiaWECE7VE65ZT1y6Taw7dVczhgNTPjhmi8GgUcrKkghVGdt9EJpPs",
+      "blockTime": 1791803678,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "AVxhoCCEjdTfYjNm5FkRHCNGARFgv4GaNACpteyHLhr7",
+      "signature": "5jL3Uq8pb3kXSoaV6C54EmvTNZakzHeoMLBCyGaYztbhB1A3fsAZkXY4CLrMdFqoj1iQ4JiH1gR1ihgx2q6ECprn",
+      "blockTime": 1791803417,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "AVxhoCCEjdTfYjNm5FkRHCNGARFgv4GaNACpteyHLhr7",
+      "signature": "3BnYS5nBGHvrXm7FgkXR5sdUgvmegwPtMknJshAWAeoQHSfRyseTibaUZiT1mhkJL5P9mFNrZCaHUeuozx1RmTyE",
+      "blockTime": 1791799891,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "DgXZpa31edzYTm4piLYTCeEyfUjreB4G7gLaJ3dh7Xyf",
+      "signature": "E5CqmxSjLmS2udkk6TnEqMkqEfz6ULhDsAQnT78gDbRG94jM4v79DqTTBxF7k4ZyJptCfmcoYA97HXZZvbWtsMi",
+      "blockTime": 1791807477,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "DgXZpa31edzYTm4piLYTCeEyfUjreB4G7gLaJ3dh7Xyf",
+      "signature": "4nTMcGBYynX84a3xmWhSSMgcjynmcFAbzA9d9mv851opPH644GvjW6q3ueCcpurhVoKDvcWiUkPTMKiZt9NUSq5g",
+      "blockTime": 1791807422,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "DgXZpa31edzYTm4piLYTCeEyfUjreB4G7gLaJ3dh7Xyf",
+      "signature": "2JJ9LLZhHxWqvZG43EWPftE6djrSb2xobCaXbVifXX2Gek9iGLUaVLduyrFHB626MQtT38RF9LXttvCHbUiSSaRN",
+      "blockTime": 1791803680,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "DgXZpa31edzYTm4piLYTCeEyfUjreB4G7gLaJ3dh7Xyf",
+      "signature": "Kmw5N8wBMKvx9D5zSoSPVUPbhsSYWvxcfxsY72sZBfRoMn989e2tu42Br7TnsuhjKXpUHx5V8y2mfVeCBkUjVTG",
+      "blockTime": 1791803434,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    },
+    {
+      "wallet": "DgXZpa31edzYTm4piLYTCeEyfUjreB4G7gLaJ3dh7Xyf",
+      "signature": "4uMAvfS6of82KgwS37SGZaqwwVkpeUo4mpGU9pE1WKjGriKHTpjtM21z5yCbfQVTMJAfsZtXFJhdHfW58brVNnzX",
+      "blockTime": 1791799870,
+      "buys": 0,
+      "reason": "no supported verified SOL swap buy",
+      "status": "captured",
+      "protocols": []
+    }
+  ]
+}
