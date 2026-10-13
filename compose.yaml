@@ -6,12 +6,6 @@ services:
     ports: ["127.0.0.1:8787:8787"]
     environment:
       API_HOST: 0.0.0.0
-      AI_KEY_PURPOSE: ${AI_KEY_PURPOSE:-unverified}
-      AI_ENABLED: ${AI_ENABLED:-false}
-      AI_PROVIDER: ${AI_PROVIDER:-qwen}
-      AI_MODEL: ${AI_MODEL:-}
-      AI_API_KEY: ${AI_API_KEY:-}
-      AI_BASE_URL: ${AI_BASE_URL:-}
       DB_PATH: /app/data/sol-signal.sqlite
     volumes: ["signal-data:/app/data"]
     healthcheck:
@@ -33,6 +27,7 @@ services:
       GRAPH_BLOCKED_ADDRESSES: ${GRAPH_BLOCKED_ADDRESSES:-}
       SOLANA_BACKUP_RPC_URL: ${SOLANA_BACKUP_RPC_URL:-}
       AUDIT_RPC_URL: ${AUDIT_RPC_URL:-}
+      CANDIDATE_POOL_MONITORING: ${CANDIDATE_POOL_MONITORING:-false}
       MAX_CANDIDATE_POOLS: ${MAX_CANDIDATE_POOLS:-2}
       CANDIDATE_WATCH_SECONDS: ${CANDIDATE_WATCH_SECONDS:-300}
       JUPITER_API_KEY: ${JUPITER_API_KEY:-}

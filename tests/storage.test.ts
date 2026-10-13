@@ -3,6 +3,9 @@ import {Store} from '../packages/storage/src/index';
 import {WALLETS,type Swap,type Quote} from '../packages/shared/src/index';
 const s:Swap={id:'entry:0',signature:'entry',index:0,slot:1,time:100000,receivedAt:100001,owner:WALLETS[0],mint:'mint',pool:'pool',protocol:'pump',lamports:'100000000',tokenRaw:'100',success:true,commitment:'confirmed',provenance:'DEMO',buyerClass:'unknown'};
 const q:Quote={mint:'mint',time:100000,provenance:'DEMO',source:'synthetic fixture',circulatingMarketCapUsd:'300000',circulationSource:'synthetic fixture',tokenAmount:'100',buyCostSol:'0.1',sellProceedsSol:'0.1',networkFeeSol:'0.000005',rentSol:'0.002',slippageSol:'0.001',coverageComplete:true};
+it('fresh websocket jobs overtake old live debt while all evidence remains durable',()=>{
+ const db=new Store(':memory:');const now=Date.now();db.enqueue({signature:'old',slot:1,seen:now-120000,source:WALLETS[0],provenance:'LIVE'});db.enqueue({signature:'new',slot:2,seen:now,source:WALLETS[0],provenance:'LIVE'});expect(db.jobs(WALLETS)[0].signature).toBe('new');expect(db.jobCount()).toBe(2);db.close();
+});
 it('persistent boundary path opens once, exits once, and audits settings',()=>{
  const db=new Store(':memory:');expect(db.apply(s,q,true).kind).toBe('entry');
  expect(db.apply(s,q,true).reason).toBe('duplicate event');

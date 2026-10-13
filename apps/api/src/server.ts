@@ -8,10 +8,8 @@ import {Store} from '../../../packages/storage/src/index';
 import {summarizeTimings} from '../../../packages/shared/src/telemetry';
 import {buyerSummary} from '../../../packages/shared/src/buyers';
 import {runDemo} from '../../../packages/strategy/src/demo';
-import {ManualAi,type AiOptions} from './ai';
 function quantile(xs:number[],q:number){if(!xs.length)return null;const a=[...xs].sort((a,b)=>a-b);return a[Math.ceil(q*a.length)-1];}
-export function createServer(store:Store,port=8787,aiOptions:AiOptions={}){
- const ai=new ManualAi(store,aiOptions);
+export function createServer(store:Store,port=8787){
  const app=Fastify({logger:false,bodyLimit:64*1024});
  const hosts=new Set([`localhost:${port}`,`127.0.0.1:${port}`,...(process.env.API_ALLOWED_HOSTS||'').split(',').filter(Boolean)]);
  app.addHook('onRequest',async(req,reply)=>{
@@ -31,8 +29,8 @@ export function createServer(store:Store,port=8787,aiOptions:AiOptions={}){
  app.get('/api/health',async(_req,reply)=>{const h=snapshot().health;if(!h.connected)reply.code(503);return h;});
  app.get('/api/metrics',async()=>({latencies:summarizeTimings(store.timings()),reconciliation:store.get('reconciliation',null),soak:store.get('soak',null)}));
  app.get('/api/settings/audit',async()=>store.audit());
- app.get('/api/ai/status',async()=>ai.status());
- app.post('/api/ai/summary',async(req,reply)=>{z.object({}).strict().parse(req.body);const result=await ai.summary();return reply.code(result.status).send(result.body);});
+ app.get('/api/ai/status',async()=>({enabled:false,modelCalls:0,policy:'no model runtime; legacy keys ignored'}));
+ app.post('/api/ai/summary',async(_req,reply)=>reply.code(503).send({error:'当前版本不接入大模型；监听与策略不消耗模型 Token'}));
  app.put('/api/settings',async(req,reply)=>{
   const input=z.object({expectedVersion:z.number().int().positive(),value:settingsSchema}).strict().parse(req.body);
   const saved=store.transaction(()=>{if(store.settings().version!==input.expectedVersion)return null;store.saveSettings(input.value);return store.settings();});

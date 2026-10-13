@@ -71,11 +71,10 @@ pnpm exec tsx scripts/backup.ts data/backup.sqlite
 
 策略区分 confirmed排除（原excluded）、suspected手动疑似（默认不排除）和publicServices公共服务。共同资金源只显示证据，不自动写任何排除名单；真实链上关联持仓比例缺数据时显示未知。
 
-## 可选千问 / GLM
-
-监听和策略不调用模型。网页“事件日志”提供手动 AI 摘要，默认关闭，服务端密钥、每天5次、间隔60秒、300输出Token请求上限。见 [docs/AI_SETUP.md](docs/AI_SETUP.md)。关闭模型不影响24小时worker；模型Key不能替代RPC或报价服务。
+## 运行时零模型 Token
+监听、解析、存储、策略和图谱由普通代码执行。模型调用模块已移除，旧 AI_* 配置会被忽略，不读取 Codex/OpenAI/GLM 凭据。免费公共 Solana RPC 不需要模型Key。用途说明见 [docs/AI_SETUP.md](docs/AI_SETUP.md)。
 
 ## 简化版观察台与免费云前端
 默认“我的钱包”可切换A/B/C，展示钱包地址、代币CA、交易证据与资金往来；策略与技术日志在“高级设置与日志”。内置“使用指南”。
 
-`pnpm build:cloud-preview` 生成独立的纯前端预览构建，禁用API/模型请求，不覆盖本机实时构建。部署与常驻后端边界见 [docs/CLOUD_DEPLOYMENT.md](docs/CLOUD_DEPLOYMENT.md)。第三方CLI Key默认未核验，不迁移到网页。
+`pnpm build:cloud-preview` 生成独立的纯前端预览构建，禁用API/模型请求，不覆盖本机实时构建。部署与常驻后端边界见 [docs/CLOUD_DEPLOYMENT.md](docs/CLOUD_DEPLOYMENT.md)。第三方CLI Key不接入当前运行版本。免费模式默认 CANDIDATE_POOL_MONITORING=false；候选池积压与旧证据保留，不因清空队列假装零漏报。

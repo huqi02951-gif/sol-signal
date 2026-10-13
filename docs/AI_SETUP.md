@@ -1,25 +1,11 @@
-# 可选千问 / GLM 事件摘要
+# 当前版本不使用大模型
 
-用途核验：[智谱 Coding Plan FAQ](https://docs.bigmodel.cn/cn/coding-plan/faq) 明确自建网站应使用标准 API。未知第三方 Key 保持 unverified；不要直接迁移 Claude Code 中的凭据。
+2026-10-13 按用户最新要求移除了模型网络调用及密钥读取代码；不依赖 AI_ENABLED 的默认值来保证零调用。旧 AI_* 环境变量无效，不能通过配置重新打开模型。/api/ai/status 始终返回 enabled=false、modelCalls=0；旧摘要接口返回503。模型回归测试明确传入旧配置并拦截fetch，确保网络调用为0。
 
-钱包监听、解析、存储和策略全部本地运行，无需 GPT、千问或 GLM。模型仅用于网页“事件日志”中的手动摘要，不参与实时链路，也不改变策略。
+钱包监听、解析、策略、存储和图谱都是普通程序。Solana RPC 是链上数据接口，不是大模型；默认免费公共RPC不要求Key。可选Helius/Jupiter是不同的链上服务，目前无相关凭据且不自动购买。
 
-在项目根目录的本地 `.env` 中填写以下变量，重启 API（`pnpm api`）。不要把真实密钥发到聊天或提交 Git。
+开发时的Codex对话仍消耗当前开发额度；运行的项目没有Codex/OpenAI SDK、服务调用、登录凭据或后台Agent推理任务。平台未提供本次开发准确Token成本，不能承诺开发额度为0。
 
-```dotenv
-AI_ENABLED=true
-AI_KEY_PURPOSE=standard_api
-AI_PROVIDER=qwen
-AI_MODEL=qwen-plus
-AI_API_KEY=填写你自己的服务商密钥
-```
+[智谱官方FAQ](https://docs.bigmodel.cn/cn/coding-plan/faq)明确Coding Plan仅限官方指定工具，自建网站应使用标准API。CLI能调用不证明网站或反代有权限。用户的Key来自第三方；未能查到明确允许当前网站用途的供应商条款，也未测试、复制或部署该凭据。不存在CLI包装转发、OpenCloud反代或伪装客户端。
 
-千问使用国内 DashScope 的 OpenAI 兼容接口，参见[阿里云文档](https://help.aliyun.com/zh/model-studio/model-calling-in-sub-workspace)。GLM 改为 `AI_PROVIDER=glm`，`AI_MODEL` 填写你账户可用的文本模型代码，参见[智谱对话补全文档](https://docs.bigmodel.cn/api-reference/模型-api/对话补全)。模型权限、价格和地区由你的服务商账户决定；不自动订购服务。
-
-其他 OpenAI 兼容服务设置 `AI_PROVIDER=custom` 和 `AI_BASE_URL=https://你的可信服务/v1`（不含 `/chat/completions`）。此地址是服务端管理员配置，会收到你的模型 Key；不要填写陌生代理地址。禁止明文 HTTP、URL 凭据和重定向。GLM Coding Plan 不用于此网站的摘要功能，也不通过 CLI 包装绕过场景限制。第三方转发平台须先确认允许自建应用，再设置 AI_KEY_PURPOSE=standard_api；这项配置记录操作者确认，不代表系统已自动验证供应商许可。已知 coding/anthropic 路径在本模块中禁用。
-
-每次只发送最近 15 条事件的类型、时间、LIVE/HISTORY/DEMO 来源和交易签名，以及连接/入场就绪布尔值，不发送事件 detail、数据库、配置或原始 RPC 报文。请求输出上限 300 Token；每天最多 5 次、间隔至少 60 秒，失败也计数，计数持久化。提供商可能另计输入/推理 Token；界面显示其返回的 usage，不承诺零费用或固定人民币预算。
-
-默认关闭时模型请求为 0。`AI_ENABLED=false` 并重启 API 即可关闭；不影响 worker。已用模拟响应测试关闭、限额、重启保留、脱敏及接口选择；没有真实 Key，因此未做真实服务商联调。
-
-本项目接入 Key 不会改变开发时 Codex 对话的模型和额度；也不能替代 Solana RPC Key、Jupiter 报价 Key 或流通供给证据。
+未来若确实需要模型，需另行核实提供商、套餐、端点、用途条款及费用，再明确实现新模块；不会自动恢复。已出现在聊天中的旧凭据应由用户在发放平台撤销重建。

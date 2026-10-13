@@ -21,6 +21,7 @@ export class Store {
    CREATE TABLE IF NOT EXISTS positions(key TEXT PRIMARY KEY,value TEXT NOT NULL);
    CREATE TABLE IF NOT EXISTS fills(key TEXT PRIMARY KEY,value TEXT NOT NULL);
    CREATE TABLE IF NOT EXISTS jobs(signature TEXT PRIMARY KEY,slot INTEGER,seen INTEGER,source TEXT,provenance TEXT,attempts INTEGER DEFAULT 0,next INTEGER DEFAULT 0);
+   CREATE INDEX IF NOT EXISTS jobs_source_next ON jobs(source,next);
    CREATE TABLE IF NOT EXISTS relations(id TEXT PRIMARY KEY,value TEXT NOT NULL);
    CREATE TABLE IF NOT EXISTS timings(signature TEXT PRIMARY KEY,time INTEGER NOT NULL,value TEXT NOT NULL);
    CREATE TABLE IF NOT EXISTS receipts(id TEXT PRIMARY KEY,signature TEXT NOT NULL,source TEXT NOT NULL,time INTEGER NOT NULL,slot INTEGER NOT NULL);`);
@@ -36,7 +37,7 @@ export class Store {
  events(limit=100):Event[]{return this.db.prepare('SELECT value FROM events ORDER BY time DESC LIMIT ?').all(limit).map(r=>JSON.parse(String(r.value)));}
  enqueue(job:Omit<Job,'attempts'|'next'>){if(this.db.prepare('SELECT signature FROM raw WHERE signature=?').get(job.signature))return;this.db.prepare('INSERT OR IGNORE INTO jobs(signature,slot,seen,source,provenance) VALUES(?,?,?,?,?)').run(job.signature,job.slot,job.seen,job.source,job.provenance);if(job.provenance==='LIVE'&&!job.source.startsWith('backfill:'))this.db.prepare("UPDATE jobs SET source=?,provenance='LIVE',seen=?,next=0 WHERE signature=? AND source LIKE 'backfill:%'").run(job.source,job.seen,job.signature);}
  job(signature:string):Job|null{return this.db.prepare('SELECT * FROM jobs WHERE signature=?').get(signature) as unknown as Job|null;}
- jobs(sources?:string[]):Job[]{const filter=sources?.flatMap(s=>[s,'backfill:'+s]);const clause=filter?.length?' AND source IN ('+filter.map(()=>'?').join(',')+')':'';return this.db.prepare('SELECT * FROM jobs WHERE next<=?'+clause+" ORDER BY CASE WHEN provenance='LIVE' AND source NOT LIKE 'backfill:%' THEN 0 ELSE 1 END, slot, seen LIMIT 20").all(Date.now(),...(filter||[])) as unknown as Job[];}
+ jobs(sources?:string[]):Job[]{const filter=sources?.flatMap(s=>[s,'backfill:'+s]);const clause=filter?.length?' AND source IN ('+filter.map(()=>'?').join(',')+')':'';return this.db.prepare('SELECT * FROM jobs WHERE next<=?'+clause+" ORDER BY CASE WHEN provenance='LIVE' AND source NOT LIKE 'backfill:%' AND seen>=? THEN 0 WHEN provenance='LIVE' AND source NOT LIKE 'backfill:%' THEN 1 ELSE 2 END, slot, seen LIMIT 20").all(Date.now(),...(filter||[]),Date.now()-60000) as unknown as Job[];}
  jobCount(sources?:string[]){const filter=sources?.flatMap(s=>[s,'backfill:'+s]);const clause=filter?.length?' WHERE source IN ('+filter.map(()=>'?').join(',')+')':'';return Number(this.db.prepare('SELECT count(*) n FROM jobs'+clause).get(...(filter||[]))!.n);}
 
  retry(job:Job){const n=job.attempts+1;this.db.prepare('UPDATE jobs SET attempts=?,next=? WHERE signature=?').run(n,Date.now()+Math.min(300000,1000*2**Math.min(n,9)),job.signature);}

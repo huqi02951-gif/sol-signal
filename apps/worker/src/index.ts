@@ -11,6 +11,8 @@ import {Market,type CoverageEvidence} from '../../../packages/market/src/index';
 import {reconcile} from './reconcile';
 import {readKnownHoldings} from './holdings';
 import {Rpc} from './rpc';
+import {subscriptionPlan} from './subscriptions';
+const candidateEnabled=process.env.CANDIDATE_POOL_MONITORING==='true';
 const store=new Store();
 const key=process.env.HELIUS_API_KEY;
 const rpc=new Rpc(key?`https://mainnet.helius-rpc.com/?api-key=${encodeURIComponent(key)}`:process.env.SOLANA_RPC_URL||'https://api.mainnet-beta.solana.com',store,Number(process.env.RPC_REQUEST_INTERVAL_MS||500),Number(process.env.RPC_DAILY_REQUEST_LIMIT||20000),{backupUrl:process.env.SOLANA_BACKUP_RPC_URL,concurrency:2});
@@ -25,9 +27,10 @@ let socket:WebSocket|undefined,stopping=false,attempt=0,requestId=1,lastPong=0,o
 const requested=new Map<number,string>();const active=new Map<number,string>();const addresses=new Set(WALLETS);
 let connected=false,backfilling=false,gap=false,lastError:string|null=null;
 function healthy(){return connected&&WALLETS.every(w=>[...active.values()].includes(w))&&Date.now()-lastSlotAt<30000&&!gap&&!lastError&&store.jobCount([...addresses])<100;}
-function report(){const quotes=watches.list().map(w=>store.get<import('../../../packages/shared/src/index').Quote|null>('quote:'+w.mint,null));const entryReady=healthy()&&quotes.some(q=>q?.coverageComplete&&Date.now()-q.time<15000);store.set('health',{connected,subscriptions:[...active.values()].filter(x=>x!=='slot'),walletSubscriptions:[...active.values()].filter(x=>WALLETS.includes(x)).length,slot,lastSlotAt,heartbeat:Date.now(),backfilling,gap,lastError,queue:store.jobCount([...addresses]),deferredQueue:store.jobCount()-store.jobCount([...addresses]),rpcScheduler:rpc.stats(),provider:key?'Helius standard':'Solana public',monitorEnabled:store.get('monitorEnabled',true),entryReady,entryBlockedReason:entryReady?null:'verified circulation, executable quote, complete pool/window evidence or queue health missing',watches:watches.list(),reconciliation:store.get('reconciliation',null)});}
+function plan(){const rows=watches.list();return subscriptionPlan(rows,candidateEnabled,store.jobCount(WALLETS),rows.length?store.jobCount(rows.map(w=>w.pool)):0,rpc.stats().primaryCoolingDown);}
+function report(){const poolPlan=plan();const quotes=watches.list().map(w=>store.get<import('../../../packages/shared/src/index').Quote|null>('quote:'+w.mint,null));const entryReady=healthy()&&candidateEnabled&&!poolPlan.candidatePausedReason&&quotes.some(q=>q?.coverageComplete&&Date.now()-q.time<15000);store.set('health',{connected,subscriptions:[...active.values()].filter(x=>x!=='slot'),walletSubscriptions:[...active.values()].filter(x=>WALLETS.includes(x)).length,slot,lastSlotAt,heartbeat:Date.now(),backfilling,gap,lastError,queue:store.jobCount([...addresses]),deferredQueue:store.jobCount()-store.jobCount([...addresses]),rpcScheduler:rpc.stats(),candidatePoolMonitoring:candidateEnabled,candidatePausedReason:poolPlan.candidatePausedReason,modelCalls:0,provider:key?'Helius standard':'Solana public',monitorEnabled:store.get('monitorEnabled',true),entryReady,entryBlockedReason:entryReady?null:'verified circulation, executable quote, complete pool/window evidence or queue health missing',watches:watches.list(),reconciliation:store.get('reconciliation',null)});}
 function syncWatches(){
- const wanted=new Set([...WALLETS,...watches.list().map(w=>w.pool)]);
+ const wanted=new Set(plan().addresses);
  for(const a of addresses)if(!wanted.has(a)){addresses.delete(a);const sub=[...active].find(([,address])=>address===a);if(sub&&socket?.readyState===WebSocket.OPEN){socket.send(JSON.stringify({jsonrpc:'2.0',id:requestId++,method:'logsUnsubscribe',params:[sub[0]]}));active.delete(sub[0]);}}
  for(const a of wanted){addresses.add(a);subscribe(a);}
 }
@@ -70,7 +73,7 @@ async function backfill(address:string){
 async function handle(job:Job){
  const tx=await rpc.call<unknown>('getTransaction',[job.signature,{encoding:'jsonParsed',commitment:'confirmed',maxSupportedTransactionVersion:0}],job.source.startsWith('backfill:')?'background':'live');
  if(!tx){store.retry(job);if(job.attempts===4)fault('transaction unavailable; retry retained');return;}
- processFetched(store,job,tx,Date.now(),watches,healthy());syncWatches();
+ processFetched(store,job,tx,Date.now(),watches,healthy()&&candidateEnabled&&!plan().candidatePausedReason);syncWatches();
 }
 let busy=false;async function drain(){if(busy||stopping||!store.get('monitorEnabled',true))return;busy=true;const claimed=new Set<string>();let processed=0;async function runner(){while(processed<20){if(stopping||!store.get('monitorEnabled',true))break;const job=store.jobs([...addresses]).find(j=>!claimed.has(j.signature));if(!job)break;claimed.add(job.signature);processed++;try{await handle(job);}catch(e){store.retry(job);const message=e instanceof Error&&/^RPC |^daily RPC/.test(e.message)?e.message:'transaction fetch/parse failed';fault(message+'; durable retry scheduled');}}}try{await Promise.all([runner(),runner()]);}finally{busy=false;report();}}
 
@@ -78,7 +81,7 @@ let scanning=false;async function scan(){if(scanning||stopping||!store.get('moni
 let checking=false;async function finalize(){if(checking||stopping)return;checking=true;try{const swaps=store.swaps(500).filter(s=>s.commitment==='confirmed'&&s.provenance!=='DEMO');const signatures=[...new Set(swaps.map(s=>s.signature))].slice(0,100);if(!signatures.length)return;const statuses=await rpc.call<{value:Array<{err:unknown;confirmationStatus:string}|null>}>('getSignatureStatuses',[signatures,{searchTransactionHistory:true}]);statuses.value.forEach((s,i)=>{if(s?.err||s?.confirmationStatus==='finalized')store.finalize(signatures[i],!!s.err);});}catch{fault('finality check unavailable');}finally{checking=false;}}
 function graph(){const rows=store.db.prepare("SELECT key,value FROM kv WHERE key LIKE 'graph:%' LIMIT 10").all();const blocked=new Set([...PROGRAMS,...addresses].filter(a=>!WALLETS.includes(a)).concat((process.env.GRAPH_BLOCKED_ADDRESSES||'').split(',').filter(Boolean)));for(const row of rows){const g=JSON.parse(String(row.value));recordTransfers(store,g.signature,g.time,g.transfers,blocked,g.provenance);store.db.prepare('DELETE FROM kv WHERE key=?').run(String(row.key));}store.set('fundingAnalysis',analyzeFunding(store.relations(),WALLETS,store.settings().value.publicServices.map(a=>a.address)));}
 // Candidate windows are bounded; open position pools remain pinned across restart.
-for(const w of watches.list())addresses.add(w.pool);
+for(const a of plan().addresses)addresses.add(a);
 let pricing=false;async function refreshMarket(){if(pricing||stopping||!store.get('monitorEnabled',true))return;pricing=true;try{for(const w of watches.list()){const position=store.positions().find(p=>p.mint===w.mint&&p.provenance==='LIVE'&&p.status==='open')??null;const coverage=store.get<CoverageEvidence|null>('coverage:'+w.mint,null);const result=await market.observe(w.mint,store.settings().value.paperBuySizeSol,slot,coverage,position);store.set('market:'+w.mint,result);store.set('quote:'+w.mint,result.quote);if(position&&result.quote)store.markQuote(result.quote);}}finally{pricing=false;report();}}
 let readingHoldings=false;async function holdings(){if(readingHoldings||stopping||!healthy())return;readingHoldings=true;try{for(const w of watches.list()){const owners=[...WALLETS,...store.settings().value.excluded.map(x=>x.address)].filter(a=>!store.settings().value.publicServices.some(p=>p.address===a));store.set('holdings:'+w.mint,await readKnownHoldings(rpc,w.mint,owners));}}finally{readingHoldings=false;}}
 let auditing=false;async function audit(){if(auditing||stopping)return;auditing=true;try{await reconcile(store,independent,auditUrl?'independent RPC':'not configured');}finally{auditing=false;}}
