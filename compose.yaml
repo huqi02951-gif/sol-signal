@@ -6,6 +6,7 @@ services:
     ports: ["127.0.0.1:8787:8787"]
     environment:
       API_HOST: 0.0.0.0
+      AI_KEY_PURPOSE: ${AI_KEY_PURPOSE:-unverified}
       AI_ENABLED: ${AI_ENABLED:-false}
       AI_PROVIDER: ${AI_PROVIDER:-qwen}
       AI_MODEL: ${AI_MODEL:-}

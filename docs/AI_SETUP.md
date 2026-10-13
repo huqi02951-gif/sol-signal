@@ -1,11 +1,14 @@
 # 可选千问 / GLM 事件摘要
 
+用途核验：[智谱 Coding Plan FAQ](https://docs.bigmodel.cn/cn/coding-plan/faq) 明确自建网站应使用标准 API。未知第三方 Key 保持 unverified；不要直接迁移 Claude Code 中的凭据。
+
 钱包监听、解析、存储和策略全部本地运行，无需 GPT、千问或 GLM。模型仅用于网页“事件日志”中的手动摘要，不参与实时链路，也不改变策略。
 
 在项目根目录的本地 `.env` 中填写以下变量，重启 API（`pnpm api`）。不要把真实密钥发到聊天或提交 Git。
 
 ```dotenv
 AI_ENABLED=true
+AI_KEY_PURPOSE=standard_api
 AI_PROVIDER=qwen
 AI_MODEL=qwen-plus
 AI_API_KEY=填写你自己的服务商密钥
@@ -13,7 +16,7 @@ AI_API_KEY=填写你自己的服务商密钥
 
 千问使用国内 DashScope 的 OpenAI 兼容接口，参见[阿里云文档](https://help.aliyun.com/zh/model-studio/model-calling-in-sub-workspace)。GLM 改为 `AI_PROVIDER=glm`，`AI_MODEL` 填写你账户可用的文本模型代码，参见[智谱对话补全文档](https://docs.bigmodel.cn/api-reference/模型-api/对话补全)。模型权限、价格和地区由你的服务商账户决定；不自动订购服务。
 
-其他 OpenAI 兼容服务设置 `AI_PROVIDER=custom` 和 `AI_BASE_URL=https://你的可信服务/v1`（不含 `/chat/completions`）。此地址是服务端管理员配置，会收到你的模型 Key；不要填写陌生代理地址。禁止明文 HTTP、URL 凭据和重定向。GLM Coding Plan 与标准推理 Key 可能使用不同端点，需要依据账户官方文档配置 custom。
+其他 OpenAI 兼容服务设置 `AI_PROVIDER=custom` 和 `AI_BASE_URL=https://你的可信服务/v1`（不含 `/chat/completions`）。此地址是服务端管理员配置，会收到你的模型 Key；不要填写陌生代理地址。禁止明文 HTTP、URL 凭据和重定向。GLM Coding Plan 不用于此网站的摘要功能，也不通过 CLI 包装绕过场景限制。第三方转发平台须先确认允许自建应用，再设置 AI_KEY_PURPOSE=standard_api；这项配置记录操作者确认，不代表系统已自动验证供应商许可。已知 coding/anthropic 路径在本模块中禁用。
 
 每次只发送最近 15 条事件的类型、时间、LIVE/HISTORY/DEMO 来源和交易签名，以及连接/入场就绪布尔值，不发送事件 detail、数据库、配置或原始 RPC 报文。请求输出上限 300 Token；每天最多 5 次、间隔至少 60 秒，失败也计数，计数持久化。提供商可能另计输入/推理 Token；界面显示其返回的 usage，不承诺零费用或固定人民币预算。
 

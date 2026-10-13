@@ -11,7 +11,7 @@ it('manual summaries use the selected provider, redact secrets, and persist limi
  const db=new Store(':memory:');let now=Date.now();const secret='test-secret-only';
  db.event({id:'sensitive-test',kind:'transaction',time:now,provenance:'LIVE',detail:{private:'DO_NOT_SEND'}});
  const fetcher=vi.fn(async()=>new Response(JSON.stringify({choices:[{message:{content:'摘要 '+secret}}],usage:{prompt_tokens:90,completion_tokens:10,total_tokens:100}}))) as unknown as typeof fetch;
- const options={env:{AI_ENABLED:'true',AI_PROVIDER:'glm',AI_API_KEY:secret,AI_MODEL:'configured-model'},fetcher,now:()=>now};
+ const options={env:{AI_ENABLED:'true',AI_KEY_PURPOSE:'standard_api',AI_PROVIDER:'glm',AI_API_KEY:secret,AI_MODEL:'configured-model'},fetcher,now:()=>now};
  const headers={host:'localhost:8787','content-type':'application/json'};let app=createServer(db,8787,options);
  const call=()=>app.inject({method:'POST',url:'/api/ai/summary',headers,payload:{}});
  const first=await call();expect(first.statusCode).toBe(200);expect(first.body).not.toContain(secret);expect(first.json().usage.totalTokens).toBe(100);
@@ -20,4 +20,11 @@ it('manual summaries use the selected provider, redact secrets, and persist limi
  await app.close();app=createServer(db,8787,options);now+=61000;expect((await call()).statusCode).toBe(429);
  expect((await app.inject({url:'/api/ai/status',headers})).body).not.toContain(secret);expect(vi.mocked(fetcher)).toHaveBeenCalledTimes(5);
  now+=86400000;expect((await call()).statusCode).toBe(200);await app.close();db.close();
+});
+it('unverified third-party keys and known coding endpoints cannot be used by the web app',async()=>{
+ for(const env of [{AI_ENABLED:'true',AI_PROVIDER:'custom',AI_BASE_URL:'https://vendor.example/v1',AI_MODEL:'glm',AI_API_KEY:'test-only'}, {AI_ENABLED:'true',AI_KEY_PURPOSE:'standard_api',AI_PROVIDER:'custom',AI_BASE_URL:'https://open.bigmodel.cn/api/coding/paas/v4',AI_MODEL:'glm',AI_API_KEY:'test-only'}]){
+  const db=new Store(':memory:');const fetcher=vi.fn();const app=createServer(db,8787,{env,fetcher});
+  expect((await app.inject({method:'POST',url:'/api/ai/summary',headers:{host:'localhost:8787','content-type':'application/json'},payload:{}})).statusCode).toBe(503);
+  expect(fetcher).not.toHaveBeenCalled();await app.close();db.close();
+ }
 });

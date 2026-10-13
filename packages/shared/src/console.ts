@@ -1,0 +1,4 @@
+import type {Event,Swap} from './index';
+export function solAmount(raw:string){const n=BigInt(raw),sign=n<0n?'-':'';const a=n<0n?-n:n;const fraction=(a%1000000000n).toString().padStart(9,'0').replace(/0+$/,'');return sign+(a/1000000000n).toString()+(fraction?'.'+fraction:'');}
+export function walletSample(address:string,swaps:Swap[],events:Event[]){return {buys:swaps.filter(s=>s.owner===address&&s.success&&s.commitment!=='reverted'&&s.provenance!=='DEMO').sort((a,b)=>b.time-a.time),transactions:events.filter(e=>e.kind==='transaction'&&e.provenance!=='DEMO'&&typeof e.detail==='object'&&e.detail!==null&&'source' in e.detail&&e.detail.source===address).sort((a,b)=>b.time-a.time)};}
+export function eventLabel(kind:string){return ({transaction:'发现链上交易',swap:'识别到买入',paper_entry:'模拟买入',paper_exit:'模拟清仓',worker_error:'监控异常',failed_transaction:'链上交易失败',buyer_observation:'买家观察',monitor_control:'监听状态变更'} as Record<string,string>)[kind]||kind;}

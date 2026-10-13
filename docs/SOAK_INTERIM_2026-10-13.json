@@ -1,0 +1,60 @@
+{
+  "startedAt": 1791817778683,
+  "lastSampleAt": 1791860344214,
+  "status": "running",
+  "elapsedMs": 42565531,
+  "consecutiveObservedMs": 2400120,
+  "gapMs": 10976576,
+  "samples": 540,
+  "unhealthySamples": 465,
+  "subscriptionHealthy": false,
+  "passed": false,
+  "result": "not accepted; collection gaps, prolonged unhealthy samples, RPC backlog, no independent reconciliation, no executable quote/circulation/real PAPER loop",
+  "latencies": {
+    "receive": {
+      "samples": 3196,
+      "p50": 1183,
+      "p95": 5022,
+      "p99": 8878
+    },
+    "rpc": {
+      "samples": 3196,
+      "p50": 1111056,
+      "p95": 4491181,
+      "p99": 5025631
+    },
+    "parse": {
+      "samples": 3196,
+      "p50": 1,
+      "p95": 2,
+      "p99": 3
+    },
+    "decision": {
+      "samples": 3196,
+      "p50": 0,
+      "p95": 5,
+      "p99": 6
+    },
+    "endToEnd": {
+      "samples": 3196,
+      "p50": 1111059,
+      "p95": 4491182,
+      "p99": 5025637
+    },
+    "signal": {
+      "samples": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null
+    },
+    "definition": "receive uses second-resolution blockTime; other durations use local wall clock milliseconds; signal samples only actual PAPER entry/exit",
+    "window": 3281
+  },
+  "reconciliation": {
+    "at": 1791859703747,
+    "status": "unavailable",
+    "reason": "independent RPC not configured",
+    "missRate": null
+  },
+  "notifiedAt": "2026-10-13T02:54:53.763Z"
+}

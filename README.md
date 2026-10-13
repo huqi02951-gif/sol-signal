@@ -74,3 +74,8 @@ pnpm exec tsx scripts/backup.ts data/backup.sqlite
 ## 可选千问 / GLM
 
 监听和策略不调用模型。网页“事件日志”提供手动 AI 摘要，默认关闭，服务端密钥、每天5次、间隔60秒、300输出Token请求上限。见 [docs/AI_SETUP.md](docs/AI_SETUP.md)。关闭模型不影响24小时worker；模型Key不能替代RPC或报价服务。
+
+## 简化版观察台与免费云前端
+默认“我的钱包”可切换A/B/C，展示钱包地址、代币CA、交易证据与资金往来；策略与技术日志在“高级设置与日志”。内置“使用指南”。
+
+`pnpm build:cloud-preview` 生成独立的纯前端预览构建，禁用API/模型请求，不覆盖本机实时构建。部署与常驻后端边界见 [docs/CLOUD_DEPLOYMENT.md](docs/CLOUD_DEPLOYMENT.md)。第三方CLI Key默认未核验，不迁移到网页。

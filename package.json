@@ -17,7 +17,8 @@
     "replay": "tsx scripts/replay.ts",
     "history": "tsx scripts/history.ts",
     "soak": "tsx scripts/soak.ts",
-    "pressure": "tsx scripts/pressure.ts"
+    "pressure": "tsx scripts/pressure.ts",
+    "build:cloud-preview": "pnpm typecheck && VITE_CLOUD_PREVIEW=true pnpm --filter @sol/web exec vite build --outDir ../../deploy/cloudflare-preview/dist --emptyOutDir"
   },
   "dependencies": {
     "zod": "^4.1.0",

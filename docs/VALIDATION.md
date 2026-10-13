@@ -27,3 +27,5 @@
 最终41测试/15文件、构建、历史回放通过，生产依赖audit零已知漏洞。详见REVIEW_ROUND1.md、PRESSURE_REPORT.json、ROUND1_METRICS_SAMPLE.json。本轮启动72h独立采集，未完成72h；用户确认暂时无报价Key/供给，继续免费只读，LIVE入场保持关闭。初版17测试记录是当时结果，不代表当前数量。
 
 2026-10-12 本轮最终检查：16个测试文件/43项通过，TypeScript与Vite通过。AI两项集成测试只使用模拟模型响应，无真实Key调用；网页已检查默认关闭与禁用按钮。主网延迟样本见ROUND1_METRICS_SAMPLE.json，不代表72h通过。
+
+2026-10-13 简化界面/用途保护：17文件46项通过；pnpm build通过。Cloudflare Pages静态预览已上线，浏览器及HTTP200确认；不存在全天候云后端或登录保护。Worker先前1101未确定根因，改用纯静态Pages并关闭失败入口。主网72h观测因采样缺口与大量不健康样本未通过，见SOAK_INTERIM_2026-10-13.json。
