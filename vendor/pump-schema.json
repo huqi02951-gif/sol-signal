@@ -1184,6 +1184,126 @@
           "address": "SysvarRent111111111111111111111111111111111"
         }
       ]
+    },
+    {
+      "name": "create",
+      "discriminator": [
+        24,
+        30,
+        200,
+        40,
+        5,
+        28,
+        7,
+        119
+      ],
+      "accounts": [
+        {
+          "name": "mint"
+        },
+        {
+          "name": "mint_authority"
+        },
+        {
+          "name": "bonding_curve"
+        },
+        {
+          "name": "associated_bonding_curve"
+        },
+        {
+          "name": "global"
+        },
+        {
+          "name": "mpl_token_metadata"
+        },
+        {
+          "name": "metadata"
+        },
+        {
+          "name": "user"
+        },
+        {
+          "name": "system_program"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program"
+        },
+        {
+          "name": "rent"
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ]
+    },
+    {
+      "name": "create_v2",
+      "discriminator": [
+        214,
+        144,
+        76,
+        236,
+        95,
+        139,
+        49,
+        180
+      ],
+      "accounts": [
+        {
+          "name": "mint"
+        },
+        {
+          "name": "mint_authority"
+        },
+        {
+          "name": "bonding_curve"
+        },
+        {
+          "name": "associated_bonding_curve"
+        },
+        {
+          "name": "global"
+        },
+        {
+          "name": "user"
+        },
+        {
+          "name": "system_program"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program"
+        },
+        {
+          "name": "mayhem_program_id"
+        },
+        {
+          "name": "global_params"
+        },
+        {
+          "name": "sol_vault"
+        },
+        {
+          "name": "mayhem_state"
+        },
+        {
+          "name": "mayhem_token_vault"
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ]
     }
   ],
   "events": [
@@ -1198,6 +1318,32 @@
         230,
         97,
         238
+      ]
+    },
+    {
+      "name": "CreateEvent",
+      "discriminator": [
+        27,
+        114,
+        169,
+        77,
+        222,
+        235,
+        99,
+        118
+      ]
+    },
+    {
+      "name": "CompletePumpAmmMigrationEvent",
+      "discriminator": [
+        189,
+        233,
+        93,
+        185,
+        92,
+        148,
+        234,
+        148
       ]
     }
   ],
@@ -1358,6 +1504,131 @@
       {
         "name": "creator_fee_unclaimed",
         "type": "u64"
+      }
+    ],
+    "CreateEvent": [
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "name": "symbol",
+        "type": "string"
+      },
+      {
+        "name": "uri",
+        "type": "string"
+      },
+      {
+        "name": "mint",
+        "type": "pubkey"
+      },
+      {
+        "name": "bonding_curve",
+        "type": "pubkey"
+      },
+      {
+        "name": "user",
+        "type": "pubkey"
+      },
+      {
+        "name": "creator",
+        "type": "pubkey"
+      },
+      {
+        "name": "timestamp",
+        "type": "i64"
+      },
+      {
+        "name": "virtual_token_reserves",
+        "type": "u64"
+      },
+      {
+        "name": "virtual_sol_reserves",
+        "type": "u64"
+      },
+      {
+        "name": "real_token_reserves",
+        "type": "u64"
+      },
+      {
+        "name": "token_total_supply",
+        "type": "u64"
+      },
+      {
+        "name": "token_program",
+        "type": "pubkey"
+      },
+      {
+        "name": "is_mayhem_mode",
+        "type": "bool"
+      },
+      {
+        "name": "is_cashback_enabled",
+        "type": "bool"
+      },
+      {
+        "name": "quote_mint",
+        "type": "pubkey"
+      },
+      {
+        "name": "virtual_quote_reserves",
+        "type": "u64"
+      },
+      {
+        "name": "creator_fee_bps",
+        "type": "u64"
+      },
+      {
+        "name": "is_holder_reward",
+        "type": "bool"
+      },
+      {
+        "name": "depth",
+        "type": "u8"
+      }
+    ],
+    "CompletePumpAmmMigrationEvent": [
+      {
+        "name": "user",
+        "type": "pubkey"
+      },
+      {
+        "name": "mint",
+        "type": "pubkey"
+      },
+      {
+        "name": "mint_amount",
+        "type": "u64"
+      },
+      {
+        "name": "sol_amount",
+        "docs": [
+          "The variable is interpreted as `amount` in the offchain services",
+          "It is amount in terms of quoteMint for the bondingCurve",
+          "The rename is not done yet to avoid breaking changes in offchain services."
+        ],
+        "type": "u64"
+      },
+      {
+        "name": "pool_migration_fee",
+        "type": "u64"
+      },
+      {
+        "name": "bonding_curve",
+        "type": "pubkey"
+      },
+      {
+        "name": "timestamp",
+        "type": "i64"
+      },
+      {
+        "name": "pool",
+        "type": "pubkey"
+      },
+      {
+        "name": "quote_mint",
+        "type": "pubkey"
       }
     ]
   }

@@ -4,7 +4,7 @@ import pump from '../../../vendor/pump-schema.json';
 import amm from '../../../vendor/pump_amm-schema.json';
 import cp from '../../../vendor/raydium_cp_swap-schema.json';
 import clmm from '../../../vendor/raydium_clmm-schema.json';
-import type { Swap, Provenance } from '../../../packages/shared/src/index';
+import type { Swap, Provenance, TokenLifecycle } from '../../../packages/shared/src/index';
 export const WSOL='So11111111111111111111111111111111111111112';
 const schemas=[pump,amm,cp,clmm];
 export const PROGRAMS=schemas.map(x=>x.address);
@@ -33,9 +33,9 @@ function decode(buf:Buffer,fields:Field[],types:Record<string,Field[]>):Record<s
  for(const f of fields){if(o===buf.length)break;out[f.name]=read(f.type);} // append-only old event layouts supported
  return out;
 }
-export function parseTransaction(raw:unknown,provenance:Provenance,receivedAt=Date.now()):{swaps:Swap[];pools:Array<{mint:string;pool:string;protocol:string}>;reason:string;transfers:Array<{from:string;to:string;lamports:string}>}{
+export function parseTransaction(raw:unknown,provenance:Provenance,receivedAt=Date.now()):{swaps:Swap[];pools:Array<{mint:string;pool:string;protocol:string}>;reason:string;transfers:Array<{from:string;to:string;lamports:string}>;lifecycles:TokenLifecycle[]}{
  const tx=txSchema.parse(raw);const signature=tx.transaction.signatures[0];
- if(tx.meta.err!==null)return {swaps:[],pools:[],transfers:[],reason:'failed transaction'};
+ if(tx.meta.err!==null)return {swaps:[],pools:[],transfers:[],lifecycles:[],reason:'failed transaction'};
  const keys=tx.transaction.message.accountKeys.map(k=>typeof k==='string'?k:k.pubkey);
  const instructions:Ix[]=[...tx.transaction.message.instructions as Ix[],...(tx.meta.innerInstructions||[]).flatMap(x=>(x as {instructions:Ix[]}).instructions)];
  const balances=[...(tx.meta.preTokenBalances||[]),...(tx.meta.postTokenBalances||[])] as Balance[];
@@ -59,9 +59,18 @@ export function parseTransaction(raw:unknown,provenance:Provenance,receivedAt=Da
   const b=Buffer.from(log.slice(14),'base64');const event=schema.events.find(x=>Buffer.from(x.discriminator).equals(b.subarray(0,8)));if(!event)continue;
   try{events.push({program:schema.address,name:event.name,value:decode(b,schema.types[event.name],schema.types)});}catch{/* malformed event never becomes a buy */}
  }
+ const lifecycles:TokenLifecycle[]=[];
+ for(const event of events){
+  if(event.program!==pump.address||!['CreateEvent','CompletePumpAmmMigrationEvent'].includes(event.name)||tx.blockTime===null)continue;
+  const v=event.value,kind=event.name==='CreateEvent'?'launch' as const:'migration' as const;
+  const instruction=matched.find(m=>m.schema.address===pump.address&&(kind==='launch'?['create','create_v2'].includes(m.name):m.name==='migrate')&&m.accounts.mint===v.mint&&m.accounts.bonding_curve===v.bonding_curve&&(kind==='launch'?m.accounts.user===v.user:m.accounts.pool===v.pool));
+  const time=Number(v.timestamp)*1000;
+  if(!instruction||!Number.isSafeInteger(time)||time<=0||Math.abs(time-tx.blockTime*1000)>5000)continue;
+  lifecycles.push({mint:String(v.mint),kind,time,slot:tx.slot,signature,program:pump.address,source:'Solana RPC successful instruction + matched program event + blockTime',verified:true,provenance,commitment:'confirmed'});
+ }
  const swaps:Swap[]=[];const consumed=new Set<number>();
  for(const [index,event] of events.entries()){
-  const v=event.value;const candidates=matched.map((m,i)=>({m,i})).filter(({m,i})=>m.schema.address===event.program&&!consumed.has(i)&&m.name!=='migrate');
+  const v=event.value;const candidates=matched.map((m,i)=>({m,i})).filter(({m,i})=>m.schema.address===event.program&&!consumed.has(i)&&!['migrate','create','create_v2'].includes(m.name));
   const match=candidates.find(({m})=>{
    if(event.program===pump.address)return m.accounts.mint===v.mint&&m.accounts.user===v.user;
    if(event.program===amm.address)return m.accounts.pool===v.pool&&m.accounts.user===v.user;
@@ -86,5 +95,5 @@ export function parseTransaction(raw:unknown,provenance:Provenance,receivedAt=Da
   swaps.push({chainTimeKnown:tx.blockTime!==null,id:`${signature}:${index}`,signature,index,slot:tx.slot,time:(tx.blockTime??Math.floor(receivedAt/1000))*1000,receivedAt,owner,mint,pool,protocol,lamports:String(amount),tokenRaw:String(tokens),success:true,commitment:'confirmed',provenance,buyerClass:'unknown'});
  }
  const transfers=instructions.filter(ix=>ix.programId==='11111111111111111111111111111111'&&ix.parsed?.type==='transfer').map(ix=>({from:String(ix.parsed!.info.source),to:String(ix.parsed!.info.destination),lamports:String(ix.parsed!.info.lamports)}));
- return {swaps,pools,transfers,reason:swaps.length?'verified protocol buy':'no supported verified SOL swap buy'};
+ return {swaps,pools,transfers,lifecycles,reason:swaps.length?'verified protocol buy':'no supported verified SOL swap buy'};
 }

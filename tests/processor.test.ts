@@ -10,8 +10,8 @@ it('real captured transaction opens a bounded candidate watch before any PAPER p
 });
 it('the worker processing path applies an external >2 SOL protective exit once even with no quote or health readiness',async()=>{
  const {default:bs58}=await import('bs58');const {parseTransaction}=await import('../apps/worker/src/parser');
- vi.useFakeTimers();const time=raw.blockTime*1000+1000;vi.setSystemTime(time);const db=new Store(':memory:');const first=parseTransaction(raw,'DEMO',time).swaps[0];
- const quote={mint:first.mint,time,provenance:'DEMO' as const,source:'SYNTHETIC TEST ONLY',circulatingMarketCapUsd:'300000',circulationSource:'SYNTHETIC TEST ONLY',tokenAmount:'100',buyCostSol:'0.1',sellProceedsSol:'0.1',networkFeeSol:'0.000005',rentSol:'0.002',slippageSol:'0',coverageComplete:true};
+ vi.useFakeTimers();const time=raw.blockTime*1000+1000;vi.setSystemTime(time);const db=new Store(':memory:');const first=parseTransaction(raw,'DEMO',time).swaps[0];db.saveSettings({...db.settings().value,unknownTriggersExit:true});
+ const quote={lifecycle:{mint:first.mint,kind:'migration' as const,time:time-10000,slot:0,signature:'SYNTHETIC-MIGRATION',program:'6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P',source:'synthetic lifecycle fixture',verified:true,provenance:'DEMO' as const,commitment:'confirmed' as const},mint:first.mint,time,provenance:'DEMO' as const,source:'SYNTHETIC TEST ONLY',circulatingMarketCapUsd:'300000',circulationSource:'SYNTHETIC TEST ONLY',tokenAmount:'100',buyCostSol:'0.1',sellProceedsSol:'0.1',networkFeeSol:'0.000005',rentSol:'0.002',slippageSol:'0',coverageComplete:true};
  expect(db.apply(first,quote,true,time).kind).toBe('entry');
  const copy=structuredClone(raw),owner=bs58.encode(new Uint8Array(32).fill(7));copy.transaction.signatures=['DEMO-EXTERNAL'];copy.blockTime+=2;
  for(const key of copy.transaction.message.accountKeys)if(key.pubkey===first.owner)key.pubkey=owner;

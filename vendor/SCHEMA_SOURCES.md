@@ -5,3 +5,5 @@
 - 对每个事件按调用栈匹配 program；再匹配已知 buy/swap 指令、池子与 token account 的 owner。不同实际接收方、失败或无法归因交易跳过。
 
 本地文件 SHA256 随版本提交保留，升级 IDL 需重放 fixtures 和新增边界测试。当前 fixtures 仅覆盖真实 PumpSwap，不宣称其他协议已获得真实样本验证。
+
+2026-10-16 增量：从 Pump 官方仓库提交 `639b87fb45c3adeffa6f7c4a1bf0cb85e392bf22` 的 `idl/pump.json` 仅补入 create/create_v2 账户位置与 CreateEvent/CompletePumpAmmMigrationEvent 字段，用于发射/迁移时间证明。要求成功指令、调用栈内事件、mint/池子匹配及链上时间交叉核验；仅有 migrate 指令而没有完成事件不能刷新迁移窗口。新增生命周期解析目前使用合成编码的协议形状测试，尚无真实创建/迁移 fixture，不声称已覆盖所有发射平台。

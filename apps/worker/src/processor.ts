@@ -7,6 +7,7 @@ export function processFetched(store:Store,job:Job,raw:unknown,rpcFetchedAt:numb
  const parsed=parseTransaction(raw,job.provenance,job.seen);const parsedAt=Date.now();
  if((raw as {transaction:{signatures:string[]}}).transaction.signatures[0]!==job.signature)throw new Error('RPC signature mismatch');
  const ingestion=job.source.startsWith('backfill:')?'backfill' as const:'websocket' as const;
+ for(const evidence of parsed.lifecycles)store.recordLifecycle(evidence);
  let signalAt:number|undefined;
  for(const swap of parsed.swaps){
   // Quotes are populated by a slow task. Protection never waits for network pricing calls.
@@ -17,7 +18,7 @@ export function processFetched(store:Store,job:Job,raw:unknown,rpcFetchedAt:numb
  }
  const decidedAt=Date.now();
  for(const p of parsed.pools){
-  const tokens=store.get<Record<string,unknown>>('tokens',{});tokens[p.mint]={...p,updatedAt:decidedAt,sourceSignature:job.signature,provenance:job.provenance,coverage:'partial',marketCapUsd:null};store.set('tokens',tokens);
+  const tokens=store.get<Record<string,{lastBuyAt?:number}>>('tokens',{});const lastBuyAt=Math.max(0,...parsed.swaps.filter(s=>s.mint===p.mint).map(s=>s.time));if((tokens[p.mint]?.lastBuyAt??0)<=lastBuyAt){const next={...p,lastBuyAt,updatedAt:decidedAt,sourceSignature:job.signature,provenance:job.provenance,coverage:'partial',marketCapUsd:null};tokens[p.mint]=next;store.set('tokens',tokens);}
   if(job.provenance==='LIVE'&&parsed.swaps.some(s=>s.mint===p.mint&&WALLETS.includes(s.owner)&&decidedAt-s.time<=300000))watches.discover({...p,signature:job.signature,discoveredAt:decidedAt},decidedAt);
  }
  store.transaction(()=>{
