@@ -1,0 +1,9 @@
+import {writeFileSync} from 'node:fs';import {performance} from 'node:perf_hooks';import {Store} from '../packages/storage/src/index';import {Rpc} from '../apps/worker/src/rpc';import {dispatchable,liveJob} from '../apps/worker/src/dispatch';
+const original=globalThis.fetch;const db=new Store(':memory:');const count=200;let active=0,maxActive=0;const done=new Set<string>();
+try{
+ globalThis.fetch=async(_url,o)=>{active++;maxActive=Math.max(maxActive,active);await new Promise(r=>setTimeout(r,3));active--;return new Response(JSON.stringify({result:JSON.parse(String(o?.body)).params[0]}));};
+ for(let i=0;i<count;i++)db.enqueue({signature:'SYNTHETIC-'+i,slot:i,seen:Date.now(),source:'pool'+(i%4),provenance:'LIVE'});
+ const rpc=new Rpc('https://synthetic.invalid',db,1,1000,{concurrency:2});const running=new Map<string,boolean>();const started=performance.now();
+ while(db.jobCount()||running.size){for(const j of dispatchable(db.jobs(),running)){running.set(j.signature,liveJob(j));void rpc.call<string>('getTransaction',[j.signature]).then(sig=>{done.add(sig);db.saveRaw(sig,j.slot,Date.now(),{synthetic:true});}).finally(()=>running.delete(j.signature));}await new Promise(r=>setTimeout(r,1));}
+ const report={label:'SYNTHETIC four-token transport/dispatcher load; NOT mainnet latency',tokens:4,totalEvents:count,processed:done.size,remaining:db.jobCount(),perToken:Array.from({length:4},(_,i)=>({source:'pool'+i,processed:[...done].filter(s=>Number(s.split('-')[1])%4===i).length})),maxTransportConcurrency:maxActive,simulatedNetworkMs:3,startIntervalMs:1,durationMs:performance.now()-started,productionRequestIntervalMs:500,acceptedForRealFourTokenLatency:false};writeFileSync('docs/V3_PRESSURE_REPORT.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));if(done.size!==count||db.jobCount()||maxActive>2)process.exitCode=1;
+}finally{globalThis.fetch=original;db.close();}

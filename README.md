@@ -2,6 +2,14 @@
 
 Solana 三钱包只读监控 + React 仪表盘 + 独立 worker + SQLite 事件存储 + 模拟策略。**当前已完成第一轮审查修正，仍未满足完整产品最终验收。** 无私钥、无真实下单、不自动购买 API。
 
+## V3 首次买家监控（增量验收版）
+
+[直接打开只读快照](https://sol-signal-preview.pages.dev/) · [实施与测试报告](docs/V3_IMPLEMENTATION_REPORT.md) · [实测延迟](docs/V3_LIVE_REPORT.json) · [供应商对比状态](docs/V3_PROVIDER_COMPARISON.json) · [GMGN 与开源研究](docs/V3_RESEARCH.md)。线上是注明采样时间的静态快照；本机 8787 才连接持续运行的 worker。
+
+新增首次买家持久账本、0.5 SOL / 1000 USD 参数、UNKNOWN 保护、三条退出规则独立开关、四币候选/等待队列、关联买家分组和历史样本图。实时任务保留并发位置；RPC 排队与网络往返分开测量；回补可续页，过期 LIVE 事件只补账。**真实外部买家总数、完整首次历史、事件时 USD、四币主网吞吐和真实 PAPER 闭环仍未通过验收**。当前免费模式只监听三个核心钱包，不声称完整池覆盖，不接入模型。
+
+补充检查：`pnpm pressure:v3`（合成四币压力）、`pnpm providers:compare`（默认只生成本地报告、不打开付费流）、`pnpm exec tsx scripts/v3-replay.ts`（真实已捕获样本回放）。新增字段对旧配置提供默认值，SQLite 迁移为新增表。
+
 ## 本地运行
 需要 Node >=22.17、pnpm 11.1.1。
 
@@ -35,7 +43,7 @@ pnpm soak
 ## 尚未验收的能力
 **用户当前选择继续免费只读监控，无报价Key或可信流通供给。LIVE 入场保持 fail-closed，直到下列条件获得证据验证：**
 1. 已加入只读Jupiter GET双向报价与流通供给证据校验接入，但当前无Key/供给证据/完整coverage，接入未启用；标准SPL租金从RPC取得，网络费为明示假设，Token-2022扩展与优先费未建模。DEX Screener marketCap/FDV仅供展示，不能自动代替流通市值。
-2. 全池发现与 Pump→PumpSwap→Raydium 自动迁移覆盖；当前仅解析后发现池子和 Pump migrate 指令；对最近 LIVE 核心买入启动有预算的候选池观察（默认2池/5分钟），持仓池保留，池 mentions coverage 仍为 partial，历史窗口完整性尚未证明。
+2. 全池发现与 Pump→PumpSwap→Raydium 自动迁移覆盖；当前仅解析后发现池子和 Pump migrate 指令；对最近 LIVE 核心买入启动有预算的候选池观察（最多4个候选代币/5分钟；免费模式默认不启用池订阅），持仓池保留，池 mentions coverage 仍为 partial，历史窗口完整性尚未证明。
 3. Raydium v4/复杂路由/所有协议真实 fixture、token receiving owner 为路由合约时的归因；不支持则保留 raw。
 4. confirmed 消失的完整回滚裁决、重放 ledger 重建；目前 err 标记 invalidated，需要人工 replay。
 5. 共同资金源与最多3层已存储路径分析已加入，输出仍为弱证据疑似；尚无完整多层链上抓取/Louvain或完整公共实体库，不会声称同控制。

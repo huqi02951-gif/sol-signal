@@ -1,0 +1,149 @@
+{
+  "generatedAt": "2026-10-15T15:55:14.583Z",
+  "status": {
+    "Helius": "NOT_TESTED: no credentials",
+    "Bitquery": "NOT_TESTED: no credentials"
+  },
+  "enabled": false,
+  "scope": [],
+  "interval": {
+    "from": 1792079162033,
+    "to": 1792079714583
+  },
+  "publicRpc": {
+    "currentRunLatencies": {
+      "chainClockAheadSamples": 5,
+      "chainTimeMissingSamples": 0,
+      "durableQueue": {
+        "samples": 5,
+        "p50": 95,
+        "p95": 394,
+        "p99": 394
+      },
+      "schedulerQueue": {
+        "samples": 5,
+        "p50": 1,
+        "p95": 476,
+        "p99": 476
+      },
+      "requestRoundTrip": {
+        "samples": 5,
+        "p50": 529,
+        "p95": 614,
+        "p99": 614
+      },
+      "timeToHeaders": {
+        "samples": 5,
+        "p50": 528,
+        "p95": 612,
+        "p99": 612
+      },
+      "bodyDecode": {
+        "samples": 5,
+        "p50": 2,
+        "p95": 2,
+        "p99": 2
+      },
+      "chainToDecision": {
+        "samples": 2,
+        "p50": 593,
+        "p95": 826,
+        "p99": 826
+      },
+      "receive": {
+        "samples": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "rpc": {
+        "samples": 5,
+        "p50": 625,
+        "p95": 1053,
+        "p99": 1053
+      },
+      "parse": {
+        "samples": 5,
+        "p50": 1,
+        "p95": 2,
+        "p99": 2
+      },
+      "decision": {
+        "samples": 5,
+        "p50": 1,
+        "p95": 20,
+        "p99": 20
+      },
+      "endToEnd": {
+        "samples": 5,
+        "p50": 626,
+        "p95": 1074,
+        "p99": 1074
+      },
+      "signal": {
+        "samples": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "definition": "requestRoundTrip includes network + provider; provider processing cannot be isolated without trusted provider timing; old rows lack split metrics. receive uses second-resolution blockTime; other durations use local wall clock milliseconds; signal samples only actual PAPER entry/exit",
+      "window": 5
+    },
+    "usage": {
+      "day": "2026-10-15",
+      "count": 492
+    },
+    "costUsd": 0
+  },
+  "comparison": [
+    {
+      "provider": "Helius",
+      "samples": 0,
+      "chainToReadyMs": {
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "missingAgainstCompleteReference": null,
+      "missRate": null,
+      "costUsd": null,
+      "scope": "same configured mint+pool+chain-time window; route dedup signature+mint+owner; chainTime second precision"
+    },
+    {
+      "provider": "Bitquery",
+      "samples": 0,
+      "chainToReadyMs": {
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "missingAgainstCompleteReference": null,
+      "missRate": null,
+      "costUsd": null,
+      "scope": "same configured mint+pool+chain-time window; route dedup signature+mint+owner; chainTime second precision"
+    }
+  ],
+  "calls": {
+    "Helius": 0,
+    "Bitquery": 0
+  },
+  "errors": {
+    "Helius": 0,
+    "Bitquery": 0
+  },
+  "independentReconciliation": {
+    "at": 1792079162070,
+    "status": "unavailable",
+    "reason": "independent RPC not configured",
+    "missRate": null
+  },
+  "accepted": false,
+  "limitations": [
+    "without credentials, neither paid provider is tested",
+    "zero samples is not zero missed trades",
+    "USD plan rates unavailable; measured request/stream counts are not a cost quote",
+    "Helius standard logs need transaction retrieval; protocol parser coverage differs from Bitquery",
+    "benchmark samples are isolated from PAPER strategy; no historical-FIRST inference",
+    "public RPC is existing wallet scope, not a comparable four-token stream"
+  ]
+}

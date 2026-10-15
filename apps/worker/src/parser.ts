@@ -83,7 +83,7 @@ export function parseTransaction(raw:unknown,provenance:Provenance,receivedAt=Da
   const balance=receiver?ownerOf(receiver):undefined;
   if(!owner||!mint||!pool||balance?.owner!==owner||balance.mint!==mint||!/^[0-9]+$/.test(String(amount))||!/^[0-9]+$/.test(String(tokens))||BigInt(String(tokens))===0n)continue;
   consumed.add(match.i);pools.push({mint,pool,protocol});
-  swaps.push({id:`${signature}:${index}`,signature,index,slot:tx.slot,time:(tx.blockTime??Math.floor(receivedAt/1000))*1000,receivedAt,owner,mint,pool,protocol,lamports:String(amount),tokenRaw:String(tokens),success:true,commitment:'confirmed',provenance,buyerClass:'unknown'});
+  swaps.push({chainTimeKnown:tx.blockTime!==null,id:`${signature}:${index}`,signature,index,slot:tx.slot,time:(tx.blockTime??Math.floor(receivedAt/1000))*1000,receivedAt,owner,mint,pool,protocol,lamports:String(amount),tokenRaw:String(tokens),success:true,commitment:'confirmed',provenance,buyerClass:'unknown'});
  }
  const transfers=instructions.filter(ix=>ix.programId==='11111111111111111111111111111111'&&ix.parsed?.type==='transfer').map(ix=>({from:String(ix.parsed!.info.source),to:String(ix.parsed!.info.destination),lamports:String(ix.parsed!.info.lamports)}));
  return {swaps,pools,transfers,reason:swaps.length?'verified protocol buy':'no supported verified SOL swap buy'};

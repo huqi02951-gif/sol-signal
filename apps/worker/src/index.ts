@@ -11,12 +11,15 @@ import {Market,type CoverageEvidence} from '../../../packages/market/src/index';
 import {reconcile} from './reconcile';
 import {readKnownHoldings} from './holdings';
 import {Rpc} from './rpc';
+import {dispatchable,liveJob,archiveAllowed} from './dispatch';
+import {backfillAddress} from './backfill';
 import {subscriptionPlan} from './subscriptions';
 const candidateEnabled=process.env.CANDIDATE_POOL_MONITORING==='true';
 const store=new Store();
 const key=process.env.HELIUS_API_KEY;
-const rpc=new Rpc(key?`https://mainnet.helius-rpc.com/?api-key=${encodeURIComponent(key)}`:process.env.SOLANA_RPC_URL||'https://api.mainnet-beta.solana.com',store,Number(process.env.RPC_REQUEST_INTERVAL_MS||500),Number(process.env.RPC_DAILY_REQUEST_LIMIT||20000),{backupUrl:process.env.SOLANA_BACKUP_RPC_URL,concurrency:2});
-const watches=new Watches(store,Number(process.env.MAX_CANDIDATE_POOLS||2),Number(process.env.CANDIDATE_WATCH_SECONDS||300)*1000);
+const rpcBudget=Number(process.env.RPC_DAILY_REQUEST_LIMIT||20000);
+const rpc=new Rpc(key?`https://mainnet.helius-rpc.com/?api-key=${encodeURIComponent(key)}`:process.env.SOLANA_RPC_URL||'https://api.mainnet-beta.solana.com',store,Number(process.env.RPC_REQUEST_INTERVAL_MS||500),rpcBudget,{backupUrl:process.env.SOLANA_BACKUP_RPC_URL,concurrency:2});
+const watches=new Watches(store,4,Number(process.env.CANDIDATE_WATCH_SECONDS||300)*1000);
 const market=new Market(rpc,{jupiterKey:process.env.JUPITER_API_KEY,circulationFile:process.env.CIRCULATION_FILE});
 const auditUrl=process.env.AUDIT_RPC_URL;
 const primaryUrl=key?'https://mainnet.helius-rpc.com':process.env.SOLANA_RPC_URL||'https://api.mainnet-beta.solana.com';
@@ -28,7 +31,7 @@ const requested=new Map<number,string>();const active=new Map<number,string>();c
 let connected=false,backfilling=false,gap=false,lastError:string|null=null;
 function healthy(){return connected&&WALLETS.every(w=>[...active.values()].includes(w))&&Date.now()-lastSlotAt<30000&&!gap&&!lastError&&store.jobCount([...addresses])<100;}
 function plan(){const rows=watches.list();return subscriptionPlan(rows,candidateEnabled,store.jobCount(WALLETS),rows.length?store.jobCount(rows.map(w=>w.pool)):0,rpc.stats().primaryCoolingDown);}
-function report(){const poolPlan=plan();const quotes=watches.list().map(w=>store.get<import('../../../packages/shared/src/index').Quote|null>('quote:'+w.mint,null));const entryReady=healthy()&&candidateEnabled&&!poolPlan.candidatePausedReason&&quotes.some(q=>q?.coverageComplete&&Date.now()-q.time<15000);store.set('health',{connected,subscriptions:[...active.values()].filter(x=>x!=='slot'),walletSubscriptions:[...active.values()].filter(x=>WALLETS.includes(x)).length,slot,lastSlotAt,heartbeat:Date.now(),backfilling,gap,lastError,queue:store.jobCount([...addresses]),deferredQueue:store.jobCount()-store.jobCount([...addresses]),rpcScheduler:rpc.stats(),candidatePoolMonitoring:candidateEnabled,candidatePausedReason:poolPlan.candidatePausedReason,modelCalls:0,provider:key?'Helius standard':'Solana public',monitorEnabled:store.get('monitorEnabled',true),entryReady,entryBlockedReason:entryReady?null:'verified circulation, executable quote, complete pool/window evidence or queue health missing',watches:watches.list(),reconciliation:store.get('reconciliation',null)});}
+function report(){const poolPlan=plan();const quotes=watches.list().map(w=>store.get<import('../../../packages/shared/src/index').Quote|null>('quote:'+w.mint,null));const entryReady=healthy()&&candidateEnabled&&!poolPlan.candidatePausedReason&&quotes.some(q=>q?.coverageComplete&&Date.now()-q.time<15000);store.set('health',{connected,subscriptions:[...active.values()].filter(x=>x!=='slot'),walletSubscriptions:[...active.values()].filter(x=>WALLETS.includes(x)).length,slot,lastSlotAt,heartbeat:Date.now(),backfilling,gap,lastError,queue:store.jobCount([...addresses]),deferredQueue:store.jobCount()-store.jobCount([...addresses]),rpcScheduler:rpc.stats(),candidatePoolMonitoring:candidateEnabled,candidatePausedReason:poolPlan.candidatePausedReason,modelCalls:0,provider:key?'Helius standard':'Solana public',monitorEnabled:store.get('monitorEnabled',true),entryReady,entryBlockedReason:entryReady?null:'verified circulation, executable quote, complete pool/window evidence or queue health missing',watches:watches.list(),waitingTokens:watches.waiting(),queueAlarm:store.jobCount([...addresses])>=100?'CONGESTED':null,oldestPendingAt:store.db.prepare('SELECT min(seen) t FROM jobs').get()?.t??null,reconciliation:store.get('reconciliation',null)});}
 function syncWatches(){
  const wanted=new Set(plan().addresses);
  for(const a of addresses)if(!wanted.has(a)){addresses.delete(a);const sub=[...active].find(([,address])=>address===a);if(sub&&socket?.readyState===WebSocket.OPEN){socket.send(JSON.stringify({jsonrpc:'2.0',id:requestId++,method:'logsUnsubscribe',params:[sub[0]]}));active.delete(sub[0]);}}
@@ -58,26 +61,22 @@ function connect(){
  socket.on('error',()=>{fault('websocket connection error');});
  socket.on('close',()=>{connected=false;active.clear();report();if(!stopping)reconnectTimer=setTimeout(()=>{reconnectTimer=undefined;connect();},Math.min(30000,1000*2**Math.min(attempt++,5))+Math.random()*500);});
 }
-interface Sig {signature:string;slot:number;blockTime:number|null;err:unknown}
-async function backfill(address:string){
- const cursor=store.get<string|null>('cursor:'+address,null);let before:string|undefined;let found=!cursor;const list:Sig[]=[];
- for(let page=0;page<10;page++){if(stopping||!store.get('monitorEnabled',true))return;
-  const rows=await rpc.call<Sig[]>('getSignaturesForAddress',[address,{limit:cursor?100:10,...(before?{before}:{}),...(cursor?{until:cursor}:{})}]);
-  list.push(...rows);if(!cursor||rows.length<100){found=true;break;}before=rows.at(-1)!.signature;
- }
- if(!found){gap=true;fault('history backfill capped; coverage gap requires deeper history replay');return;}
- // Enqueue before cursor advancement; queued work survives restart.
- store.transaction(()=>{for(const row of [...list].reverse())if(!row.err)store.enqueue({signature:row.signature,slot:row.slot,seen:Date.now(),source:'backfill:'+address,provenance:cursor?'LIVE':'HISTORY'});if(list.length)store.set('cursor:'+address,list[0].signature);});
- store.set('backfill:'+address,{checkedAt:Date.now(),count:list.length,firstScan:!cursor});
-}
+async function backfill(address:string){return backfillAddress(store,rpc,address,()=>stopping||!store.get('monitorEnabled',true));}
 async function handle(job:Job){
- const tx=await rpc.call<unknown>('getTransaction',[job.signature,{encoding:'jsonParsed',commitment:'confirmed',maxSupportedTransactionVersion:0}],job.source.startsWith('backfill:')?'background':'live');
+ const tx=await rpc.call<unknown>('getTransaction',[job.signature,{encoding:'jsonParsed',commitment:'confirmed',maxSupportedTransactionVersion:0}],job.source.startsWith('backfill:')||Date.now()-job.seen>15000?'background':'live');
  if(!tx){store.retry(job);if(job.attempts===4)fault('transaction unavailable; retry retained');return;}
  processFetched(store,job,tx,Date.now(),watches,healthy()&&candidateEnabled&&!plan().candidatePausedReason);syncWatches();
 }
-let busy=false;async function drain(){if(busy||stopping||!store.get('monitorEnabled',true))return;busy=true;const claimed=new Set<string>();let processed=0;async function runner(){while(processed<20){if(stopping||!store.get('monitorEnabled',true))break;const job=store.jobs([...addresses]).find(j=>!claimed.has(j.signature));if(!job)break;claimed.add(job.signature);processed++;try{await handle(job);}catch(e){store.retry(job);const message=e instanceof Error&&/^RPC |^daily RPC/.test(e.message)?e.message:'transaction fetch/parse failed';fault(message+'; durable retry scheduled');}}}try{await Promise.all([runner(),runner()]);}finally{busy=false;report();}}
+const runningJobs=new Map<string,boolean>();let lastArchiveAt=0;function drain(){if(stopping||!store.get('monitorEnabled',true))return;
+ const jobs=store.jobs([...addresses]);
+ if(![...runningJobs.values()].includes(false)&&archiveAllowed(store.jobCount([...addresses]),store.get('rpcUsage',{day:'',count:0}),rpcBudget,lastArchiveAt)){const archived=store.jobs().find(j=>!runningJobs.has(j.signature)&&!liveJob(j));if(archived){jobs.push(archived);lastArchiveAt=Date.now();}}
+ for(const job of dispatchable(jobs,runningJobs)){
+  runningJobs.set(job.signature,liveJob(job));
+  void handle(job).catch(e=>{store.retry(job);const message=e instanceof Error&&/^RPC |^daily RPC/.test(e.message)?e.message:'transaction fetch/parse failed';fault(message+'; durable retry scheduled');}).finally(()=>{runningJobs.delete(job.signature);report();});
+ }
+}
 
-let scanning=false;async function scan(){if(scanning||stopping||!store.get('monitorEnabled',true))return;scanning=true;backfilling=true;report();try{for(const a of addresses){if(stopping||!store.get('monitorEnabled',true))break;await backfill(a);}lastError=null;}catch(e){const message=e instanceof Error&&/^RPC |^daily RPC/.test(e.message)?e.message:'backfill RPC unavailable';fault(message);}finally{scanning=false;backfilling=false;report();}}
+let scanning=false;async function scan(){if(scanning||stopping||!store.get('monitorEnabled',true))return;scanning=true;backfilling=true;report();try{for(const a of addresses){if(stopping||!store.get('monitorEnabled',true))break;await backfill(a);}gap=[...addresses].some(a=>store.get('backfillProgress:'+a,null)!==null);if(gap)lastError='history coverage gap; paginated recovery continuing';else lastError=null;}catch(e){const message=e instanceof Error&&/^RPC |^daily RPC/.test(e.message)?e.message:'backfill RPC unavailable';fault(message);}finally{scanning=false;backfilling=false;report();}}
 let checking=false;async function finalize(){if(checking||stopping)return;checking=true;try{const swaps=store.swaps(500).filter(s=>s.commitment==='confirmed'&&s.provenance!=='DEMO');const signatures=[...new Set(swaps.map(s=>s.signature))].slice(0,100);if(!signatures.length)return;const statuses=await rpc.call<{value:Array<{err:unknown;confirmationStatus:string}|null>}>('getSignatureStatuses',[signatures,{searchTransactionHistory:true}]);statuses.value.forEach((s,i)=>{if(s?.err||s?.confirmationStatus==='finalized')store.finalize(signatures[i],!!s.err);});}catch{fault('finality check unavailable');}finally{checking=false;}}
 function graph(){const rows=store.db.prepare("SELECT key,value FROM kv WHERE key LIKE 'graph:%' LIMIT 10").all();const blocked=new Set([...PROGRAMS,...addresses].filter(a=>!WALLETS.includes(a)).concat((process.env.GRAPH_BLOCKED_ADDRESSES||'').split(',').filter(Boolean)));for(const row of rows){const g=JSON.parse(String(row.value));recordTransfers(store,g.signature,g.time,g.transfers,blocked,g.provenance);store.db.prepare('DELETE FROM kv WHERE key=?').run(String(row.key));}store.set('fundingAnalysis',analyzeFunding(store.relations(),WALLETS,store.settings().value.publicServices.map(a=>a.address)));}
 // Candidate windows are bounded; open position pools remain pinned across restart.

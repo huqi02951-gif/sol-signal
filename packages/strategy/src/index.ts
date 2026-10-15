@@ -5,14 +5,16 @@ export function isExternal(swap:Swap,settings:Settings):boolean {
  return !WALLETS.includes(swap.owner) && !settings.excluded.some(x=>x.address===swap.owner) && !settings.publicServices.some(x=>x.address===swap.owner) && !(settings.excludeSuspected && settings.suspected.some(x=>x.address===swap.owner));
 }
 export function decide(swap:Swap,settings:Settings,position:Position|null,history:Swap[],quote:Quote|null,version:number,healthy:boolean,evaluatedAt=Math.max(swap.time,swap.receivedAt)):Decision {
+ if(swap.provenance==='LIVE'&&swap.chainTimeKnown===false)return ignored('chain time unavailable; accounting only');
  if (!swap.success || swap.commitment==='reverted') return ignored('failed or reverted transaction');
  if (position?.status==='open') {
+  if(swap.provenance==='LIVE'&&(swap.ingestion==='backfill'||evaluatedAt-swap.time>15000))return ignored('stale LIVE observation; accounting only');
   if(swap.provenance==='LIVE'&&swap.receivedAt<position.openedAt)return ignored('observation predates PAPER entry');
   if (position.mint!==swap.mint || position.provenance!==swap.provenance || swap.time+999 < position.openedAt || swap.id===position.openEvent) return ignored('unrelated or stale event');
-  if (isExternal(swap,settings) && (swap.buyerClass==='external'||settings.unknownTriggersExit) && new Decimal(swap.lamports).gt(new Decimal(settings.exitExternalSingleBuySol).mul(1e9))) {
+  if (settings.externalSingleBuyEnabled && isExternal(swap,settings) && (swap.buyerClass==='external'||settings.unknownTriggersExit) && new Decimal(swap.lamports).gt(new Decimal(settings.exitExternalSingleBuySol).mul(1e9))) {
    return {kind:'exit',reason:swap.buyerClass==='unknown'?'unknown buyer protective exit':'external single buy exceeds threshold',position:{...position,status:'closed',closedAt:evaluatedAt,closeEvent:swap.id,reason:'external single buy'}};
   }
-  if (quote && quote.mint===position.mint && quote.provenance===position.provenance && quote.time>=evaluatedAt-15000 && quote.time<=evaluatedAt && new Decimal(quote.tokenAmount).eq(position.tokenAmount)) {
+  if (settings.netTakeProfitEnabled && quote && quote.mint===position.mint && quote.provenance===position.provenance && quote.time>=evaluatedAt-15000 && quote.time<=evaluatedAt && new Decimal(quote.tokenAmount).eq(position.tokenAmount)) {
    const pnl=new Decimal(quote.sellProceedsSol).minus(quote.networkFeeSol).minus(quote.slippageSol).minus(position.buyCostSol);
    if(new Decimal(position.buyCostSol).gt(0) && pnl.div(position.buyCostSol).mul(100).gte(settings.netTakeProfitPct)) return {kind:'exit',reason:'net take profit after estimated costs',position:{...position,status:'closed',closedAt:evaluatedAt,closeEvent:swap.id,netPnlSol:pnl.toString(),reason:'net take profit'}};
   }
@@ -34,7 +36,7 @@ export function decide(swap:Swap,settings:Settings,position:Position|null,histor
  return {kind:'entry',reason:'tracked buy with verified quote, circulation and coverage',position:{id:swap.id,mint:swap.mint,openedAt:evaluatedAt,openEvent:swap.id,buyCostSol:cost.toString(),tokenAmount:quote.tokenAmount,sizeSol:settings.paperBuySizeSol,version,provenance:swap.provenance,status:'open'}};
 }
 export function quoteExit(position:Position,quote:Quote,settings:Settings,evaluatedAt:number):Decision {
- if(position.status!=='open'||quote.mint!==position.mint||quote.provenance!==position.provenance||quote.time>evaluatedAt||evaluatedAt-quote.time>15000||!new Decimal(quote.tokenAmount).eq(position.tokenAmount))return ignored('unrelated/stale position quote');
+ if(!settings.netTakeProfitEnabled||position.status!=='open'||quote.mint!==position.mint||quote.provenance!==position.provenance||quote.time>evaluatedAt||evaluatedAt-quote.time>15000||!new Decimal(quote.tokenAmount).eq(position.tokenAmount))return ignored('unrelated/stale position quote');
  const pnl=new Decimal(quote.sellProceedsSol).minus(quote.networkFeeSol).minus(quote.slippageSol).minus(position.buyCostSol);
  if(new Decimal(position.buyCostSol).lte(0)||pnl.div(position.buyCostSol).mul(100).lt(settings.netTakeProfitPct))return ignored('net target not reached');
  return {kind:'exit',reason:'net take profit from quote refresh',position:{...position,status:'closed',closedAt:evaluatedAt,closeEvent:'quote:'+position.mint+':'+quote.time,netPnlSol:pnl.toString(),reason:'net take profit'}};

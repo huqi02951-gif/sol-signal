@@ -23,7 +23,9 @@ export function processFetched(store:Store,job:Job,raw:unknown,rpcFetchedAt:numb
  store.transaction(()=>{
   store.saveRaw(job.signature,job.slot,decidedAt,raw);
   store.event({id:job.signature+':parsed',kind:'transaction',time:job.seen,signature:job.signature,provenance:job.provenance,detail:{slot:job.slot,reason:parsed.reason,buys:parsed.swaps.length,source:job.source.replace(/^backfill:/,''),ingestion,blockTime:(raw as {blockTime:number|null}).blockTime,rpcFetchedAt,parsedAt,decidedAt}});
-  store.timing({signature:job.signature,provenance:job.provenance,ingestion,chainTime:(raw as {blockTime:number|null}).blockTime?Number((raw as {blockTime:number}).blockTime)*1000:null,receivedAt:job.seen,rpcFetchedAt,parsedAt,decidedAt,signalAt});
+  const trace=store.get<{queuedAt:number;startedAt:number;headersAt:number}|null>('rpcTiming:'+job.signature,null);
+  store.db.prepare('DELETE FROM kv WHERE key=?').run('rpcTiming:'+job.signature);
+  store.timing({rpcQueuedAt:trace?.queuedAt,rpcStartedAt:trace?.startedAt,rpcHeadersAt:trace?.headersAt,signature:job.signature,provenance:job.provenance,ingestion,chainTime:(raw as {blockTime:number|null}).blockTime?Number((raw as {blockTime:number}).blockTime)*1000:null,receivedAt:job.seen,rpcFetchedAt,parsedAt,decidedAt,signalAt});
   store.set('graph:'+job.signature,{signature:job.signature,time:(raw as {blockTime:number|null}).blockTime?Number((raw as {blockTime:number}).blockTime)*1000:job.seen,transfers:parsed.transfers,provenance:job.provenance});
  });
  return parsed;

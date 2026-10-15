@@ -3,6 +3,9 @@ import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { defaults, settingsSchema, type Settings, type Swap, type Position, type Quote, type Event, type Provenance } from '../../shared/src/index';
+import Decimal from 'decimal.js';
+import {firstRecord,summarizeFirstBuyers,type FirstBuyRecord} from '../../strategy/src/first-buyers';
+import {isExternal} from '../../strategy/src/index';
 import { decide,quoteExit } from '../../strategy/src/index';
 export interface Job {signature:string;slot:number;seen:number;source:string;provenance:Provenance;attempts:number;next:number}
 export class Store {
@@ -18,6 +21,8 @@ export class Store {
    CREATE TABLE IF NOT EXISTS raw(signature TEXT PRIMARY KEY,slot INTEGER,time INTEGER,value TEXT NOT NULL);
    CREATE TABLE IF NOT EXISTS swaps(id TEXT PRIMARY KEY,time INTEGER NOT NULL,mint TEXT NOT NULL,provenance TEXT NOT NULL,value TEXT NOT NULL);
    CREATE INDEX IF NOT EXISTS swaps_mint_time ON swaps(mint,provenance,time);
+   CREATE TABLE IF NOT EXISTS first_buys(key TEXT PRIMARY KEY,positionId TEXT NOT NULL,mint TEXT NOT NULL,provenance TEXT NOT NULL,value TEXT NOT NULL);
+   CREATE INDEX IF NOT EXISTS first_buys_position ON first_buys(positionId,provenance);
    CREATE TABLE IF NOT EXISTS positions(key TEXT PRIMARY KEY,value TEXT NOT NULL);
    CREATE TABLE IF NOT EXISTS fills(key TEXT PRIMARY KEY,value TEXT NOT NULL);
    CREATE TABLE IF NOT EXISTS jobs(signature TEXT PRIMARY KEY,slot INTEGER,seen INTEGER,source TEXT,provenance TEXT,attempts INTEGER DEFAULT 0,next INTEGER DEFAULT 0);
@@ -43,6 +48,8 @@ export class Store {
  retry(job:Job){const n=job.attempts+1;this.db.prepare('UPDATE jobs SET attempts=?,next=? WHERE signature=?').run(n,Date.now()+Math.min(300000,1000*2**Math.min(n,9)),job.signature);}
  saveRaw(signature:string,slot:number,time:number,raw:unknown){this.db.prepare('INSERT OR IGNORE INTO raw VALUES(?,?,?,?)').run(signature,slot,time,JSON.stringify(raw));this.db.prepare('DELETE FROM jobs WHERE signature=?').run(signature);}
  raw(limit=50):{signature:string;value:unknown}[]{return this.db.prepare('SELECT signature,value FROM raw ORDER BY slot DESC LIMIT ?').all(limit).map(r=>({signature:String(r.signature),value:JSON.parse(String(r.value))}));}
+ firstBuyRecords(p:Position):FirstBuyRecord[]{return this.db.prepare('SELECT value FROM first_buys WHERE positionId=? AND provenance=?').all(p.id,p.provenance).map(r=>JSON.parse(String(r.value)));}
+ firstBuyerMonitors(){const settings=this.settings().value;return this.positionHistory().map(p=>summarizeFirstBuyers(p,this.firstBuyRecords(p),settings));}
  positions():Position[]{return this.db.prepare('SELECT value FROM positions').all().map(r=>JSON.parse(String(r.value)));}
  positionHistory():Position[]{const rows=this.db.prepare('SELECT value FROM fills').all().map(r=>JSON.parse(String(r.value)) as Position);const byId=new Map([...rows,...this.positions()].map(p=>[p.provenance+':'+p.id,p]));return [...byId.values()];}
  markQuote(q:Quote,evaluatedAt=Date.now()){return this.transaction(()=>{const p=this.positions().find(p=>p.mint===q.mint&&p.provenance===q.provenance&&p.status==='open');if(!p)return {kind:'ignore',reason:'no open position'};const d=quoteExit(p,q,this.settings().value,evaluatedAt);if(d.position){this.db.prepare('UPDATE positions SET value=? WHERE key=?').run(JSON.stringify(d.position),p.provenance+':'+p.mint);this.db.prepare('INSERT INTO fills VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(p.provenance+':'+p.id,JSON.stringify(d.position));this.event({id:d.position.closeEvent!,kind:'paper_exit',time:evaluatedAt,provenance:q.provenance,detail:{decision:d.reason,quote:q,position:d.position,configVersion:this.settings().version}});}return d;});}
@@ -54,7 +61,18 @@ export class Store {
    const conf=this.settings();const key=s.provenance+':'+s.mint;
    const row=this.db.prepare('SELECT value FROM positions WHERE key=?').get(key);
    const history=this.db.prepare('SELECT value FROM swaps WHERE mint=? AND provenance=? AND time>=? AND time<=?').all(s.mint,s.provenance,s.time-conf.value.entryWindowSeconds*1000,s.time).map(r=>JSON.parse(String(r.value)));
-   const d=decide(s,conf.value,row?JSON.parse(String(row.value)):null,history,q,conf.version,healthy,evaluatedAt);
+   let d=decide(s,conf.value,row?JSON.parse(String(row.value)):null,history,q,conf.version,healthy,evaluatedAt);
+   if(d.kind==='entry'&&this.positions().filter(p=>p.status==='open'&&p.provenance===s.provenance).length>=conf.value.maxActiveTokens)d={kind:'ignore',reason:'active token capacity reached; candidate remains queued'};
+   const p:Position|null=row?JSON.parse(String(row.value)):null;
+   if(p?.status==='open'&&s.success&&s.commitment!=='reverted'&&s.time>=p.openedAt&&s.id!==p.openEvent&&isExternal(s,conf.value)){
+    const records=this.firstBuyRecords(p);const before=summarizeFirstBuyers(p,records,conf.value);
+    const earlier=!!this.db.prepare("SELECT id FROM swaps WHERE mint=? AND provenance=? AND json_extract(value,'$.owner')=? AND json_extract(value,'$.signature')!=? AND json_extract(value,'$.success')=1 AND json_extract(value,'$.commitment')!='reverted' AND (time<? OR (time=? AND json_extract(value,'$.slot')<?)) LIMIT 1").get(s.mint,s.provenance,s.owner,s.signature,s.time,s.time,s.slot);
+    const record=firstRecord(s,earlier);
+    this.db.prepare('INSERT OR IGNORE INTO first_buys VALUES(?,?,?,?,?)').run([p.provenance,p.id,s.mint,s.owner,s.signature].join(':'),p.id,s.mint,s.provenance,JSON.stringify(record));
+    const after=summarizeFirstBuyers(p,this.firstBuyRecords(p),conf.value);
+    const stale=s.provenance==='LIVE'&&(s.ingestion==='backfill'||evaluatedAt-s.time>15000||s.receivedAt<p.openedAt);
+    if(d.kind!=='exit'&&!stale&&conf.value.firstBuyerExitEnabled&&new Decimal(before.exactCumulativeUsd).lt(conf.value.firstBuyExitCumulativeUsd)&&new Decimal(after.exactCumulativeUsd).gte(conf.value.firstBuyExitCumulativeUsd))d={kind:'exit',reason:'first buyer cumulative USD threshold',position:{...p,status:'closed',closedAt:evaluatedAt,closeEvent:s.id,reason:'first buyer cumulative USD threshold'}};
+   }
    if(d.position){this.db.prepare('INSERT INTO fills VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(d.position.provenance+':'+d.position.id,JSON.stringify(d.position));this.db.prepare('INSERT INTO positions VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(key,JSON.stringify(d.position));}
    this.event({id:s.id,kind:d.kind==='ignore'?'swap':`paper_${d.kind}`,signature:s.signature,time:s.receivedAt,provenance:s.provenance,detail:{swap:s,decision:d.reason,evaluatedAt,quote:q,configVersion:conf.version}});
    return d;
@@ -64,7 +82,7 @@ export class Store {
   this.transaction(()=>{
    const rows=this.db.prepare('SELECT id,value FROM swaps WHERE json_extract(value,\'$.signature\')=?').all(signature);
    for(const row of rows){const s:Swap=JSON.parse(String(row.value));s.commitment=reverted?'reverted':'finalized';this.db.prepare('UPDATE swaps SET value=? WHERE id=?').run(JSON.stringify(s),s.id);}
-   if(reverted){for(const p of this.positionHistory())if(rows.some(r=>r.id===p.openEvent||r.id===p.closeEvent)){p.status='invalidated';p.reason='source transaction reverted; manual replay required';this.db.prepare("UPDATE positions SET value=? WHERE key=? AND json_extract(value,'$.id')=?").run(JSON.stringify(p),p.provenance+':'+p.mint,p.id);this.db.prepare('UPDATE fills SET value=? WHERE key=?').run(JSON.stringify(p),p.provenance+':'+p.id);}}
+   if(reverted){for(const p of this.positionHistory()){let affected=false;for(const r of this.firstBuyRecords(p))if(r.signature===signature){r.reverted=true;affected=true;this.db.prepare("UPDATE first_buys SET value=? WHERE positionId=? AND provenance=? AND json_extract(value,'$.signature')=? AND json_extract(value,'$.owner')=?").run(JSON.stringify(r),p.id,p.provenance,signature,r.owner);}if(affected){p.status='invalidated';p.reason='first-buyer source reverted; ledger replay required';this.db.prepare("UPDATE positions SET value=? WHERE key=? AND json_extract(value,'$.id')=?").run(JSON.stringify(p),p.provenance+':'+p.mint,p.id);this.db.prepare('UPDATE fills SET value=? WHERE key=?').run(JSON.stringify(p),p.provenance+':'+p.id);}}for(const p of this.positionHistory())if(rows.some(r=>r.id===p.openEvent||r.id===p.closeEvent)){p.status='invalidated';p.reason='source transaction reverted; manual replay required';this.db.prepare("UPDATE positions SET value=? WHERE key=? AND json_extract(value,'$.id')=?").run(JSON.stringify(p),p.provenance+':'+p.mint,p.id);this.db.prepare('UPDATE fills SET value=? WHERE key=?').run(JSON.stringify(p),p.provenance+':'+p.id);}}
   });
  }
  timing(row:Timing){this.db.prepare('INSERT OR IGNORE INTO timings VALUES(?,?,?)').run(row.signature,row.receivedAt,JSON.stringify(row));}

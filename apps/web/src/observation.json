@@ -1,0 +1,1123 @@
+{
+  "at": 1792079781615,
+  "activity": [
+    {
+      "mint": "4VXNQUEVq5BPHWAnKDrBN6zqqumKDVy6mYjvBtLipump",
+      "from": 1791993381615,
+      "to": 1792079781615,
+      "lastTradeAt": 1792079703000,
+      "tradeCount": 7,
+      "observedOwners": 1,
+      "knownRelated": 1,
+      "suspectedRelated": 0,
+      "noKnownLink": 0,
+      "verifiedExternal": null,
+      "verifiedFirst": 0,
+      "unknownFirst": 1,
+      "completeness": "PARTIAL",
+      "buyers": [
+        {
+          "owner": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+          "classification": "KNOWN_RELATED",
+          "firstPurchase": "UNKNOWN",
+          "buys": 7,
+          "lastAt": 1792079703000,
+          "signature": "4oTxKnMaM4zbW3g37VHhs1Z377kRRD2eJXvkJxwTgFzpLfE5n5VHGTnC7gaNHBkVnSxWNo65zgEnExmozdzjZjG2",
+          "evidenceSignatures": []
+        }
+      ],
+      "scope": "up to 10000 stored supported buys in selected chain-time window; not all-chain buyers; issuer identity unverified"
+    }
+  ],
+  "archive": [
+    {
+      "mint": "2cnbDmBPJnm3mbs5orGzZwfE5cjrhR3SDBCAA9drpump",
+      "from": 1791785910000,
+      "to": 1792079781615,
+      "lastTradeAt": 1791840784000,
+      "tradeCount": 379,
+      "observedOwners": 201,
+      "knownRelated": 1,
+      "suspectedRelated": 0,
+      "noKnownLink": 200,
+      "verifiedExternal": null,
+      "verifiedFirst": 0,
+      "unknownFirst": 201,
+      "completeness": "PARTIAL",
+      "buyers": [
+        {
+          "owner": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+          "classification": "KNOWN_RELATED",
+          "firstPurchase": "UNKNOWN",
+          "buys": 13,
+          "lastAt": 1791840784000,
+          "signature": "4jLrSDQcKVvQhWEWo3AyaR9ZcDhMS13bxpFgYGeFwGw1ZLkti5ieQn3s2dexhqqvZW64bADkboufNyZmqH5dX13j",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "HkR8SdxsjHyTW5cS55TykaBJh4mcZyWrCkGbDaibiLEg",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 4,
+          "lastAt": 1791838209000,
+          "signature": "dQdPd54pk33hu7u1iKZE7j5A6TfhxqvpLoBBjeWoW9gzdXMLgxmgjVzGKNEhV39auvi1sN1m6KsKaCqabMZCeCT",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "Ez7sXys58tDzYt6T9RiTGxZgvoRsREJo37zrc4pZx2tx",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791838209000,
+          "signature": "4JBeUn25jMahj2Hnp491xt9yjqhThPQwyds6YBTREucnMJ77jeUvMWaf6EXP1VqHnvSo3T452LHqdk6TbAnqk28x",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "2erVDfaUGrAWDB2vczQJ6f2Z9Wi1tnJPfR49xAMP567K",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791838209000,
+          "signature": "2pRDCAvCrsC4DtLHYJ9PxX7XdeqP4CAcNvfeCkwkFynqDH2r2fWQh3ncGATF1S2qdHzJjHgAiGSneikAUTscpx39",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "Fy5zfVtXbUjXNgG9Kqvf8Z9QhwgLofVgeT26UNHuqLes",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791838209000,
+          "signature": "4CBiop6zJuwYM3gRWmQX7j5k8b5YDsGodkc1QA1BxbqEbER5jhTnb9TymQ8SdsjBdiokJbkjWqQsgQ3a8Yi7PVQz",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "EnaiPAe6CYoVwcY6YZvJ9TvvNiiBiXKGFqCC1N3UyW68",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791838208000,
+          "signature": "59oL6E53o2nPLQxcvn7kX8JTUimmzmWTVmMWD9CLfkMqUaZ8bk2k1BUaeC4ksh7WZbsZbgVGvMnR6iMNVH1TsUWw",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "BSsKUnXwU8eFCbDJzvgDAqzSMVp7FPHVFfNaUngjicvR",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791838208000,
+          "signature": "3QyUXqQkCrLuzr6qXUqUwdx4XCaZvpjimbxk1nqkgygjDpfF97c2hwt4r7BN14JuJ4zk3RD5PsUtfhRT5omER4Js",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "9NfBrEYxu3NKsmw9HKTogRpnNzDc1k3tgs27FGKZnQqZ",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791838207000,
+          "signature": "3LwDxu8qioyKzHGh16xyRpdMARVBfhgRtzsLB6hiR5Ao6Kyp7rW4zK9uAS7ywtJKWANzb4rnDURmpPdSkG3D4hHF",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "EyFLwHQi3cf3XG7kvJCA21dRLmSS3MpdGFnpqHqB2Czu",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 4,
+          "lastAt": 1791838207000,
+          "signature": "4yPrqaErMERQwkKPe8wk97qyHCz5wAJyJpvPT3j1d5XTuhTnM8gyyWzA6ZanXbmZEyG6psoGkcQtohj1CsZXLisX",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "9GuZmFXS7ATAm5EudkFBqep9htmQPQDdaieuNJDrybbp",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791838206000,
+          "signature": "4FGwNJ548AcEp5wa5EJjmiTGzCpiVha8DuR1j3bgur9y2ZVn2yAYgYqzrQXHmJLSg4qTCNwvaYQAGHn9cmisHCSE",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "6i8rqAknpmf41oeuShsJYD4MuuJsqYC7hpQf5nVrWR2G",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791838206000,
+          "signature": "3Z6wGB1fX8AWzP4JhA14XMiY5hHc2y1QWqp3tkb8swXtqjoeN6T68ufrjiyoLMLkFXtTxA2agaFjVw7cRzRvw2Dk",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "B3qEePiR1LTcSfWoivD54VWSWzNbEGybLFx2EQkyHXFy",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791838206000,
+          "signature": "3fKEkXQhhd25KrtcUvV9f7y8VXCe5ZKJmpkU827yDUQhFzZ48oGijShvhmu9noTSYXcS7QrmQoULMpPHMxiNFcFA",
+          "evidenceSignatures": []
+        }
+      ],
+      "scope": "up to 10000 stored supported buys in selected chain-time window; not all-chain buyers; issuer identity unverified"
+    },
+    {
+      "mint": "8Ho3xjEXTEGgdC6fkhFdsyfMfUakAdPmg21seSdqpump",
+      "from": 1791785910000,
+      "to": 1792079781615,
+      "lastTradeAt": 1791834617000,
+      "tradeCount": 317,
+      "observedOwners": 193,
+      "knownRelated": 1,
+      "suspectedRelated": 0,
+      "noKnownLink": 192,
+      "verifiedExternal": null,
+      "verifiedFirst": 0,
+      "unknownFirst": 193,
+      "completeness": "PARTIAL",
+      "buyers": [
+        {
+          "owner": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+          "classification": "KNOWN_RELATED",
+          "firstPurchase": "UNKNOWN",
+          "buys": 13,
+          "lastAt": 1791834617000,
+          "signature": "4Aj13FahK5MeJYh8Tui67fRpDPQniGaoDrvxYWrnJJYKEEfLvAiU6gpJsELG4bGcaQsmBtTB3jvbtqJo1s5yiSRe",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "GoJ8aYubgshryqEp26ASEfFMUsXrqEynbm9osUA3W6VS",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791829782000,
+          "signature": "39Dq2kY4AVpK6ZVMoGKsJdSmXA5CjzY8PMzaeBEFeTk1vaQCXswrpoerjTAX8hzRM3pRCMToxQSs1ufPXGU8zVqz",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "BC8othUXuU9r6ciKxJETkU7bGTJ3QFRBzNbGytwCwvSu",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791829782000,
+          "signature": "TAvs2QXBSxmaXQukarCqDo17PWySaY3fuWfLv1Xp2V3vwjARxjbTaP29VHKosLA8UZtqiPBXCNRBHDD1Wgm3Z96",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "ANDsFcGvCrKHRXX7PeVka5kGnzaDhttbCdLcRnmw1c1n",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791829782000,
+          "signature": "3VPqFsn8ZmLE5S7bjZNnDSwwj3c5v4bEmzkyURQeEbnVPFxftN6sy99ZU6rpVJN2AW5DTr3g1PLb3vssx2pE9TKV",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "4jaomK4Fw7Zn8NTkrkAhzQrREPUM4NnuxDt9Qwk39uMb",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791829782000,
+          "signature": "5ojx6ZdVW8LoDbn9QxzYskF9mLW7XCAZ9Dks4N9rHzJyo7wTdXqmZcXszCca28z6H49JygAxLjwjPEHTKbDQJ4GQ",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "do27pRw42kRC8LE3uRBaiBwKR5KawJzC7z5wnv9YBBN",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791829782000,
+          "signature": "5pZsburkEEUePX8zb7G36LzYfuxy1ixg1hX9viALy7g6UMmvaKLL6uRfvyNc8ZRjZYixZg5MpQrZNifute37ExDj",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "DipWLFHh5wvW3dHU58tZpkLMEkZxMYpPgXpSncTajYkx",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791829781000,
+          "signature": "4TTVuLC66WC3hriQuniSxTV7zpFrpNf25VoA2duswy56GzFDEEg9CwK7iNQYjqnASanGyNsFQYiRab1wjZwUPSjT",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "H1pv1PpWDEWvyCu1BkL96WjeXUWdDYC3LHXtaU5oeJ7c",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791829781000,
+          "signature": "ngtXuUZ1i14tFyeQXdwaBXTdhBQdSAfvGhZVLvXXEeMf6rkgXahoY2MeecRX6ruq4pwmAwfzM8mf5mAbJzYnq7R",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "6i8rqAknpmf41oeuShsJYD4MuuJsqYC7hpQf5nVrWR2G",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791829781000,
+          "signature": "2xruBjx8AtHW6niUAFKzTbcbG2ZhQryfN6MEPqKxf5JNcW2oLHeZAkZptYGFd1SExZpa33XnQhefkCPuU4smkpLj",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "HGEozpaYEP4iVuX9Tbj4fYPvKtgvcgk12Nczi9BcpDb6",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791829780000,
+          "signature": "4paV3GApx2HSS62ebAz6YZAavBS6gAQoqxmoiecw6GSu8GcnzGSxAnnkPLBCajFj2XHRVGvisHKN4hsKfeHiNB3T",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "AordYxC3bDGWgh1BQqKc9MFc1JxpZ2bJ4ktwXdfhaevQ",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791829779000,
+          "signature": "4HS29xiWdH9PPnYDdLRxfh2J6SjZpKG5GEifdnjga4yA7ZcwZxvgnYip3YMTrZ7QncY7n3xKv1n4YwpN5hGAKWrT",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "85eVrvrkSqpKxUuYyqkUXjkABW9ay4933xUuz172i6Sn",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791829779000,
+          "signature": "4RKqY1Fx3gSjCTDP5189SVmhEUj9skRLrrEXqbFrb3DoQTdHunusZMPXFjDYu5c3a7ekE37RGCxH5cULrSQ47MJU",
+          "evidenceSignatures": []
+        }
+      ],
+      "scope": "up to 10000 stored supported buys in selected chain-time window; not all-chain buyers; issuer identity unverified"
+    },
+    {
+      "mint": "3XVbgCnpeZvCJewTEhTq2i9yJ4H7ufrbKS8mPXXkpump",
+      "from": 1791785910000,
+      "to": 1792079781615,
+      "lastTradeAt": 1791828090000,
+      "tradeCount": 296,
+      "observedOwners": 172,
+      "knownRelated": 1,
+      "suspectedRelated": 0,
+      "noKnownLink": 171,
+      "verifiedExternal": null,
+      "verifiedFirst": 0,
+      "unknownFirst": 172,
+      "completeness": "PARTIAL",
+      "buyers": [
+        {
+          "owner": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+          "classification": "KNOWN_RELATED",
+          "firstPurchase": "UNKNOWN",
+          "buys": 9,
+          "lastAt": 1791828090000,
+          "signature": "57MSB84e4u1wb47zehxP57M2vCXoTDo7ZpXWKyx4He4GTFTxGQ8dgAanM73FHUq9WnCpkyy7m3CZ4cW12T2n9eva",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "37vhXoCJxsCyUV4umGZBJb5MSU8ZotXiczgehpNxgRyi",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791823847000,
+          "signature": "2AkKbTEqEfKa1Bpw8QoRvPxGAvo8yNaHUFFje1gYHm9xofS8JP4pZ7awft5D2sPoaEzNikXrv75Gv78KYbHpLwCG",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "5uqAkSCCeaLpzLcuQUdcV2Z19wpLVL9YZFmqQjLinSbu",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791823847000,
+          "signature": "5JYfzRZLds6x7kMoX942jJySSdaMD49yQX9JQKVjQUi4W3XnSsNHVjunXTbdsuZ5E2NSoguBiaYTqRyfFWkLPCyH",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "E4JndjwwJm4ENQP8kjeJ4DfLV7mtass5UzfpzfZcmSh3",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791823847000,
+          "signature": "3aYCobUconoRMnujKUkXM1mgyZycfphthJow4kgWhoCduFXecGRxrA2Vg8gDqm7DNu3CfdjZ2VQUFbtBXkF8mAup",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "6MvD2dyV7kc67R5kuoy2DWWfq4uHPM6ZAUcbq7J1QeoU",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 8,
+          "lastAt": 1791823847000,
+          "signature": "5nXJMaja2DnU6yBNjDMHtjttKLV1SHJYo4Hvqv6uak7LRXFsV5dBJhnoYvXApEuVtZcDZzBjqeRCk3VwEtEVZA3t",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "5uS4domVTM3gK15WmCcEb6DubwwTNjg4feiRUCNS2C2f",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791823847000,
+          "signature": "5jZeEcLCinT8njfo7tnhJcXstRkmdU9f9kA2zGsTivfvbd2z9zMSyYowKBHJfLGth9NPR6hPEnoi6NTFwLdnc5Ns",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "4PN3CztrEsZffrwmE18KqyD43UC1Ufnbgndohc2eHgDu",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791823846000,
+          "signature": "uZrkxp9ZiDvC8Ci4WT9rLtrGKMPjLirMcyhNrunMfVT2hE92eneNLALuRKSAX2mh93BHLrmP2nhAbv2GeKMyaLK",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "8FXG1YnBhnAfwCiAWQcypNqT8N9dx6hyd3rmmJ6wT5uD",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791823846000,
+          "signature": "4ThN48fLup62tkPeMGgFkRDWnXX2gkMzGoNY24mWMx3AufSdJZoXZpSDgHPHhkFtLPFzA5YRUyipttWo2B5PQa9W",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "BC8othUXuU9r6ciKxJETkU7bGTJ3QFRBzNbGytwCwvSu",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791823846000,
+          "signature": "2PdbdCgPbP8schyQW9TASQAxh27BQvjSy3TAxAMDGNFSRgyepcUp4KarTkeuBCGPvzNMgLkFVqPJF1ChF3u7bhz",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "CmBJvVcjdGGFky1JQGEHpBJdp8s39kc97idJZr4bv66S",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 4,
+          "lastAt": 1791823846000,
+          "signature": "xYnrh3Qg25t5AnEuygdTTrQy2LKsx5LpobtLiVj39DZxfatEVtHYizBn1HuK3WEHANDH5zUHMc1AefiECN3UG6N",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "2twGRmSuePYN5TtHqAmVar1mrGz3AYhmqrwfvVhHg1ZY",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791823846000,
+          "signature": "2Fw4T5qVp6zijNgssDyMcxCrsQYUoy6ZFHTqYeDy5MU7ACRtbqi1tkpQ4GSChaCA97dwvi6bi5E3PL6zCgoiTGUt",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "8VGocrMF86YdAA1ywrjsKeMNn4qY9kCPKzR6ro35hs3w",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791823846000,
+          "signature": "3VMsGUuyBbqz8cRmgXV9gVVWPsoLJMX77jooeXuJFPU7f5NRwgAPBhtxDDnQV3kFih3KdMLYAPrrjDjk97XqUdoT",
+          "evidenceSignatures": []
+        }
+      ],
+      "scope": "up to 10000 stored supported buys in selected chain-time window; not all-chain buyers; issuer identity unverified"
+    },
+    {
+      "mint": "H3J1qgvRuLZdv9nX5zQv6yWDHLfMyQu4SmG3wkE1pump",
+      "from": 1791785910000,
+      "to": 1792079781615,
+      "lastTradeAt": 1791865837000,
+      "tradeCount": 251,
+      "observedOwners": 170,
+      "knownRelated": 1,
+      "suspectedRelated": 0,
+      "noKnownLink": 169,
+      "verifiedExternal": null,
+      "verifiedFirst": 0,
+      "unknownFirst": 170,
+      "completeness": "PARTIAL",
+      "buyers": [
+        {
+          "owner": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+          "classification": "KNOWN_RELATED",
+          "firstPurchase": "UNKNOWN",
+          "buys": 5,
+          "lastAt": 1791865837000,
+          "signature": "3z4CAPhbnBPWVz7M9kAWC28LQmFMPnoWS8bBJkn5cgZGx1G17AMmZcQHkoMJMAwmPbA3fJhoKNrWpjohjU8MErD8",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "YZqKHPtjHRNHZ5UybWRCK5s2U5AZ2zm6Y9oBqnaea5Q",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791864249000,
+          "signature": "38HZX4mizwdPse2rFgctL2yTsTjpYWjpyhDMyggMK6XhoLfFLGb9RXRMQC9KFkHLvsoWBXsU7VEizASDgwrPKGL",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "BSsKUnXwU8eFCbDJzvgDAqzSMVp7FPHVFfNaUngjicvR",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791864249000,
+          "signature": "fky6RXY5KPYP83qr1hRCEymAvYxxYqRwH9zx8h41Y8cXpAvcAXaNTXr8brs9KgkyFR1wfNxYt4p5N5HBFeUd95K",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "EpmnL68Djz9FYNj6X6pwUwfCcYbKzH2AFMo4k9pu1CxC",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791864249000,
+          "signature": "3j6kg3GpBadZSfhM3ue5vzFJPaMvdtmgaAUpJhxWawZrAxtriDALw7jNep1rfwWbkTgzgQ5RcV4Tzosf9guYsSsx",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "3Cqxpaj3yxxXjEGi7xWxT3U846WhLKkzotLDSsuFUcRV",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791864249000,
+          "signature": "5Yfdx4XypEwnYiskb441HhivgBviS68PkrzmQsMvs3NgHiPQLsUo6gqDVcqvJG4CdRwLRrevmoUyFRbAGjPy65LY",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "F7cp5RzadsEmQE9LmVVyMh7rMm6gHY1mDrdmbA6NWj2t",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791864249000,
+          "signature": "ndPjrD98urridtjpqpo7seb9EzHBSKuHr2CbfFRmeKkuqhmEKfedLJkXQ328nJeaKxWxbDGeCcfsAMTgxvsbZpL",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "Dhw4EGEVGKGMAaUmHmP4YmFVUrF1eDg5Xekpk7DaPhWj",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791864249000,
+          "signature": "4QY711QCbnsZcgbwBBh7qLmVkUz9GffqLc994vw3nG1iV66WMM5md7JS2gRUYgJ4o5vczGEU3MSCgeiM9L3CVDZ5",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "4fdckhui938du5Ufnuw5fM8paJDyKh1ZnoVfZ8xMvGPy",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791864248000,
+          "signature": "4vf8jKXiD3xJ3KdBp1WtzqqZHNrqAWVDcSbp1Zu1So1r37NFczgnBnY2ndBK5ShagqMwzQ7Uv1f591uZgzghKeLQ",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "Ap9PWPrqycaqi82yLnARBwymEcoKv1JaKBuR6QYgQpv9",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791864248000,
+          "signature": "2yfPy3HRtqEXJLqPFdBj5Vu5qRY6mFyDdnqyspRSq6bib2cvvvuYDdZYtjNcDrFVPqTR1em1GH2GmYMKCKxouUg5",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "Fj651XK9d2QRbMHeNzY1WZRSKhKpYBgePtzJQUh2NrRL",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791864248000,
+          "signature": "37nt5d3k8HQDNo2zAvxBp5Fmwaoai7qKYgWCk2AKwdJTKr26m8VgvRW2AeenGwqveqvN5xhewKQo5hxsb6tFpQBu",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "EUXoStheb9BwBfMBxE8GSpiSexkVs22YauUZ7NdpzfU",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 4,
+          "lastAt": 1791864248000,
+          "signature": "5GJKqhydYB6HRpE8tr6CB7xD7d2CZugQRGZ4sPKvf9RYKyVUszRtbdtrWQTftFwVBuo8Um4RCgSANwgHZCfqXX3d",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "4odgos49Q2kfiBvoZCSBv33k6RXqWvxoEpmGbxnWpcFy",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791864248000,
+          "signature": "3sUuT6Q7HSjuYHqJK2hJAdRBQBsBSzZHGEeyaWhPp19zJL66xTB6yYJPWn9q5G4yepcNrSsioLcZA791eHCmbi4m",
+          "evidenceSignatures": []
+        }
+      ],
+      "scope": "up to 10000 stored supported buys in selected chain-time window; not all-chain buyers; issuer identity unverified"
+    },
+    {
+      "mint": "CXeE5ZutbkWKMXdwBDW9Xrej81xzFJ9vtWvEnZHQpump",
+      "from": 1791785910000,
+      "to": 1792079781615,
+      "lastTradeAt": 1791861154000,
+      "tradeCount": 238,
+      "observedOwners": 164,
+      "knownRelated": 1,
+      "suspectedRelated": 0,
+      "noKnownLink": 163,
+      "verifiedExternal": null,
+      "verifiedFirst": 0,
+      "unknownFirst": 164,
+      "completeness": "PARTIAL",
+      "buyers": [
+        {
+          "owner": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+          "classification": "KNOWN_RELATED",
+          "firstPurchase": "UNKNOWN",
+          "buys": 7,
+          "lastAt": 1791861154000,
+          "signature": "3VYHiBbXyYHMYeojgEHMA5VteJmojjCHnipRtLgYc292oTjSeYbWNmPHk154RHy7xWXMeGma6wh5gkWrYZfM4MUY",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "8Ee12pFAbuujvDxma6a4nHuWLCxsYn5UEiM8TufhmC47",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791858341000,
+          "signature": "3WAEjfJyYsE2csetAGWXQD73bgKMjje3Bkj82ngbGJ58sgrneVimmvqCdzjgiqLPxDFPbUQHC5VbQ1iT3bAt7NSd",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "GrNhEr8aRZLoG9ctaow5NDmtQ1U1NhwWJRupPx63vFp9",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791858340000,
+          "signature": "usPGPJaXsKkXcJ9i2f2162sKWszuZYLT7avyvNFNGGL4VsFRN2P2zi1Nouu2aeyBqtMopuhd6xAKAAUdayTdxk8",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "9NfBrEYxu3NKsmw9HKTogRpnNzDc1k3tgs27FGKZnQqZ",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791858340000,
+          "signature": "3uBeFbkSQ8DD2NWaEVZyb9LRMMBY3P4ybdkUhLZKWwUvmToVmh2nUHL6CadwZivNF2QQxUAMh9fLGqL2fiFdG3YV",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "GTsGpaLeUE6xqkpXpQJGv42uZtseD4ATiNMXrWd3xu6y",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791858340000,
+          "signature": "2H4ttyU67WQbeF4Jdf6nv6kaUbbE1JziUdUwUSodRiMCH3bLjBJ1i9fqJc5kZxFG4iBVuaBWFx8QK3gZkujLedKs",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "AordYxC3bDGWgh1BQqKc9MFc1JxpZ2bJ4ktwXdfhaevQ",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791858340000,
+          "signature": "2EBt4oGumacJavAyr6yutgqtChvhJkMao8dXtkYCTVXvipQGyVEr7nis1Q98JTWjcghhMDgR1djAEy7ep8tPG1mv",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "DTRnEHvkTXhX1iruVAwAhgjcCwFTHbL3ntEXeS4f5h7J",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791858340000,
+          "signature": "3fchwX2iUECekVjfPpYKrusPr91VX21xP35wCtyZoxgQAgegtooi5k1pXpv7D1rRSNSHCKAy4bYCwdZ4i72wAfZC",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "EpmnL68Djz9FYNj6X6pwUwfCcYbKzH2AFMo4k9pu1CxC",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791858340000,
+          "signature": "3WfpcxtsyhAxWEe7M8tYufBsJCZQ1ghGDD29AbPowwdtFmSxEFo4GqCG9fT1U9oxz1MDt6UY5rDeSJY3gPYL6q9W",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "FaptDkpQv4JyoCBaj1qCbumArtPZGZrEdgeWnSGGNhi5",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791858338000,
+          "signature": "49PG7zpQYJGwNad64GXYZytLCmEyEHeff6DBNGeCzqQUG7TBieFVVqVDT7d1cahM6V3cbPpvBB66jyjjXd3jTPNy",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "HpasoarWVDFcqYbpzusQ8WXE8RQwu63R7Ck8AQTxkaMW",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791858338000,
+          "signature": "2mxyN5sERiZj1ar7h1Jg9SE5AXucebcd8YrevZqbkhm6zLBHEtwgDt8kxtXNwiyvFs1EQ7Ctj1x5k21ouUcRhkRg",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "Ejjam2xzo1hxBedm4XPHt8zJdgH8TCpaNpnQaj5MyMtx",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791858338000,
+          "signature": "Vxjc2YUcKdfgSZdAecodUcg6g5GMgu2tMtFai3NmRfoqXfRWwZuyL4MNKAcXG9j5evN4vJQTNnvo7HsHkU7rM7v",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "2JSbn3kzyHp7ZxFYWN7ZutTpoXJ5cXGQYXpTrpZFgCAq",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 4,
+          "lastAt": 1791858337000,
+          "signature": "5VuqU8vwEULFWkKtxVirerV4TW5867gq6B6WfBGRLdJUJmeAn8tzztyEz16HEVr9Xwv6zD62iCJQP929PPiLY1yk",
+          "evidenceSignatures": []
+        }
+      ],
+      "scope": "up to 10000 stored supported buys in selected chain-time window; not all-chain buyers; issuer identity unverified"
+    },
+    {
+      "mint": "6WcvaR1cT8fsU8oEkmrqzw8YgM1LjGfbFG71Vju5pump",
+      "from": 1791785910000,
+      "to": 1792079781615,
+      "lastTradeAt": 1791855850000,
+      "tradeCount": 193,
+      "observedOwners": 141,
+      "knownRelated": 1,
+      "suspectedRelated": 0,
+      "noKnownLink": 140,
+      "verifiedExternal": null,
+      "verifiedFirst": 0,
+      "unknownFirst": 141,
+      "completeness": "PARTIAL",
+      "buyers": [
+        {
+          "owner": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+          "classification": "KNOWN_RELATED",
+          "firstPurchase": "UNKNOWN",
+          "buys": 8,
+          "lastAt": 1791855850000,
+          "signature": "2ekTAWpBtJCgGaR4nGfQ5Xz2r6S3qtkQQwgKZaxWzconFqgywMZqJch3dJxgKYbTjFpWmqP9V63rHt2CmTM6TWCK",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "6WudUzEhBcfxupNregGTLh36MKSkTqNCZk7RmrCd8etB",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791853900000,
+          "signature": "3DvAQfqbydQVpoZRNQF3zPQ7Y4ZmKN5KDNhnWZ7yDZmsga958cwkt5X7Pe2TRvitrq8LGfvDQtmBMoMzjTMdhNjG",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "ANDsFcGvCrKHRXX7PeVka5kGnzaDhttbCdLcRnmw1c1n",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 3,
+          "lastAt": 1791853900000,
+          "signature": "3wWkztC7HXxFw474ocirbVc2Pw7kaxcmGiGYaS64FnZ39Vzi78harkFahyeqCZcST11spaHQ4wBFkadgm79e4QVj",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "8y9XGpzF5LhYRahdMbPmbvAkvKSznTnjQi5C21ncDb3b",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791853900000,
+          "signature": "3dGyJomUBtrTpVn2xeF8sDPD8MCAu4JyD8DTD6f9schZLcbM6tv5zdVZ6uKCmE7YyMgm3sAgcVbXQgQCKaRSHcyS",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "DHPBurMdA3SpWCSD4MtMaQmMnD6dy9VmnSZzwqJ8C7op",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791853900000,
+          "signature": "2D1fBnDqEBpDmA44rzsbH99LyQdAdpdNJjBDwYBVGSuqCeXSexb3TDLf229vQ3frp5KVTf3vroDho7Z7HKYrfbV7",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "H1pv1PpWDEWvyCu1BkL96WjeXUWdDYC3LHXtaU5oeJ7c",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791853898000,
+          "signature": "4PvZDaq8Db17YDktDyRnUsbz2b3yccR8UkYBBYf3SnEKS8re8UvuwVRuEEzgVmdaGqwQRF3ZGsCiVcJoXwyma654",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "B2dgSBrRxafzhK3GBFWeLeZ6UgJzexoWkM2SvJTb66Qg",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791853898000,
+          "signature": "5arFaFrn81UC1t3x5Q3TtVFk8R9ETVgngzfjVqaHG3ATDmKUQCYpSG56pjxxr72jGQVVMMtvZ8G7gExwYrLmtnZZ",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "45t5ybNwqLTBTnhgYLPktwJYLiJSSB6kyv7BS68KYmjr",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791853898000,
+          "signature": "4mEKr9JHuycMRWv2WAFd4pdKMJQA2eh7ZUPdfquNSxp5GU9WECh4wCoHrLwNNZwsVXKwQSeWgJHqb8LD2hFnZXWm",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "7zDemWTzqJ8ygiARLJuuPxHNXwQpK89sL7P9kjs7f8if",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791853897000,
+          "signature": "4VMLqVEHdNaKLqDyVfkJCJid6jZSAucBKHxc6k8KEnH8MmCHQWFW6EojSbWzbFLySXTHDAvjn7KB6kXDm8euaAsn",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "CrKu6oD8w3tR7yGoaBLnMypaW5qumSCKqTG9DzwHqho2",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791853897000,
+          "signature": "3km3Ww5ZvHQpmwHKXRREK9EHmS5pJGLWBT5bMtokn7J9awdXQm7DotYC2naSjtANZJHdM3FySLDdrmD7isTw1mAk",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "BSsKUnXwU8eFCbDJzvgDAqzSMVp7FPHVFfNaUngjicvR",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791853896000,
+          "signature": "3THHTYibg6gHLckZ9wyFeGCdpu8fxTbhKqKNaerRn4N2XF25k2YYiyGHFJd1KFAqSkJR2hZpGDwYCdkbQuyCEDzt",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "Gh4fCUeKwBTR7fJNaRzcJd8B3nRGMGaeysscpR4Rx53p",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791853896000,
+          "signature": "5JYs1Y1YYn87LFzFNDSX6XZ8dwJBC6JDkevWXznipGT1iARJfuwPuXqm5uiA7zasW5dnVoPb43qTKbNGopoPqtLq",
+          "evidenceSignatures": []
+        }
+      ],
+      "scope": "up to 10000 stored supported buys in selected chain-time window; not all-chain buyers; issuer identity unverified"
+    },
+    {
+      "mint": "8df74PrixgXwQcrKMNfChpJDoRVw5rK4MKRthFzapump",
+      "from": 1791785910000,
+      "to": 1792079781615,
+      "lastTradeAt": 1791851215000,
+      "tradeCount": 90,
+      "observedOwners": 79,
+      "knownRelated": 1,
+      "suspectedRelated": 0,
+      "noKnownLink": 78,
+      "verifiedExternal": null,
+      "verifiedFirst": 0,
+      "unknownFirst": 79,
+      "completeness": "PARTIAL",
+      "buyers": [
+        {
+          "owner": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+          "classification": "KNOWN_RELATED",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791851215000,
+          "signature": "2NSdjRm2ofWEAkRxeVEBpDzvBKzBEYhbdDp6EkhCiYxt3DXozM3p6tmcEHAR1iosuJrwgRnjQ1qPTZ3xgMiLEck8",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "3Q4oHNtWnxY2QB47tRcRhXMp3C62trXhqCNFjQG3tEq3",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791850817000,
+          "signature": "4HN45yKXcYzGws8zLKa9RQQWGaWZk86LGJKkXUG2j4ySwH4P1NaB8RKxqB2RF5ocPc2JyCd69T4gNeVH9YL7YUwm",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "do27pRw42kRC8LE3uRBaiBwKR5KawJzC7z5wnv9YBBN",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791850817000,
+          "signature": "5KrSdxp5Gsd4EDF3Tf1vS2nLybEDSZdNRotVzNcsqrKTMJzngEbVAgmPBDchRnqv1wmCQJRFjobEnvGwyDPHn7ns",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "Dhw4EGEVGKGMAaUmHmP4YmFVUrF1eDg5Xekpk7DaPhWj",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791850817000,
+          "signature": "3x41Ktd97a3dPjqFgpvD3L532Tyz3afvxepC2ySqfMarpZ4nSLcWhPqadbVJyeAA16A9oMrmBACXx8j612eXZF4i",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "2twGRmSuePYN5TtHqAmVar1mrGz3AYhmqrwfvVhHg1ZY",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791850816000,
+          "signature": "2ppKjxPhKCtaMBaYuJrSSkrPyetrgky4XK9w3ySrMZej5WpGtywreoJJ5NvcGrcjJeRiwpXfSjm3CUiHi5hS6TxL",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "5utbo2AkQweVSaSNwQEiamydEF7qqSEk9zsxvowk5ZFa",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791850816000,
+          "signature": "5rePp1odbo5gMusMKb3hg2DUjaJ9z5TCk7HkXvQGhaxoKPMRiRk9xZHCh69EwoEqc8HqBo4odnEnn82E4MbiCmyf",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "9abWrBZiD7wuEp2TXf1XPThnWTEgXhSY5q8w6bLEJ78j",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791850816000,
+          "signature": "5KJhXxefnSwzy2E8iA2rTPWB7BuDzPi95BrpP8oZYkLuyKFEEP6RDBaqTyF2tgMpjTJbL1EJ5Chy75suuMotfTsf",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "6WudUzEhBcfxupNregGTLh36MKSkTqNCZk7RmrCd8etB",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791850816000,
+          "signature": "2DfTNaAVKsmyhnHjCj127sMvzNuYGuVs6mW1YbA8YT8QXAGWmrf4C1uTYoJogdbchq3UbxAoMuqnZqUEYPH3w8Lq",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "7nd1Dwxzz7vjLKXvUznU6uWfqQ5sL4DimFFyPtDrtowB",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791850815000,
+          "signature": "46FNz9FXm12aHTwb78rmJQqotfE9csAo5kjYyu81SgDHoxw3X1jrmEiEsmZz4K2bV1sdTUxzMHWVLRQdj3cv433X",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "CTwWGyP4VXUYrsbzfEMMkYFZNAH2YNUfytPuMA64XPLC",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791850815000,
+          "signature": "4SU7526tjX8tkdT4YxrfExMQouqxbda7zVs3zXy1UG83zh5zVVxTxe1xcsR1mNarRRN6cRtGzDxCjkdxssM43RPk",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "EyFLwHQi3cf3XG7kvJCA21dRLmSS3MpdGFnpqHqB2Czu",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791850815000,
+          "signature": "5FC7NYVTDNKZ7N39WphNXZy4VDFvxVEjXsNxkhjm2pndiWeLMWJqFAGdKM1Ew9yDj61goFjTTnLCuojhAspEGbfX",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "2n1jpdJyhZ3N4CM4VxA8d6kLZo6Anh8kcjnG21bPeanH",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791850815000,
+          "signature": "4J2J2YdCsxqG9RtdQNsQW1kMm7G3rZud8vpSvWLqwpXFKRVZxLMkjyc3GbyogzMQqjTtgjoGiGC6vLVJyRhogt9F",
+          "evidenceSignatures": []
+        }
+      ],
+      "scope": "up to 10000 stored supported buys in selected chain-time window; not all-chain buyers; issuer identity unverified"
+    },
+    {
+      "mint": "3YqeH9CR1CaJe4PWmY7dpGiKfWx7YnRhyHBBfSKnpump",
+      "from": 1791785910000,
+      "to": 1792079781615,
+      "lastTradeAt": 1791845051000,
+      "tradeCount": 74,
+      "observedOwners": 68,
+      "knownRelated": 1,
+      "suspectedRelated": 0,
+      "noKnownLink": 67,
+      "verifiedExternal": null,
+      "verifiedFirst": 0,
+      "unknownFirst": 68,
+      "completeness": "PARTIAL",
+      "buyers": [
+        {
+          "owner": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+          "classification": "KNOWN_RELATED",
+          "firstPurchase": "UNKNOWN",
+          "buys": 2,
+          "lastAt": 1791845051000,
+          "signature": "3NTYbY8Gx2mcJR99UB87kCd6WgGhq8KC2Av4yPJQcpqeSZZ4fRyA7YXpySbzf11hEScVUbrRdBeLF2LXUh3cYiRG",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "7rY66guMXErebKJV7V3Bh2XKjMmKou2W3hKYyYaxRWQm",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844166000,
+          "signature": "48RFt3MA3AwgqA6EGSyMWpPnPPfbbW6a1MXKhonabecnDDrXZXNCFKiEv47ivZ5x466JcCgAsKMSA4QV2s9Zqdx4",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "Ba3iJLuNmhkcqmczh7aBymzJFPLNoR3XbKyNQdZQdPag",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844166000,
+          "signature": "5cQjGF49h4RkLPAv8q8pdCHw9eLfKsh8z332W1q8kncEs9u4zfiur9xAb1NCuccrpLWcAZ88wBZvyBnRRJ4GwHKn",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "3Cqxpaj3yxxXjEGi7xWxT3U846WhLKkzotLDSsuFUcRV",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844166000,
+          "signature": "4TwN1w6QJ1aoV51sdvRqBRCN29QQq6XNASbam5tRqtZfFi4uB5w6z25RLWabp62J3oiDT7Nu2y1KQULo9pBMvWZn",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "8VGocrMF86YdAA1ywrjsKeMNn4qY9kCPKzR6ro35hs3w",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844166000,
+          "signature": "Sinssqaq7gss7BE7ampgS6sA4NR5GezknZZBKvHLQMvR8KL8wTLZqE6o18JUBxSzf2aKahHS8imnWhD77ZfEsEX",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "CoYs3WBnYajsPPyNDvXNwxFewPd4PkWG6KRPFh6H4APn",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844166000,
+          "signature": "Kf7ZhNBV6vSQxVM16ReFpiEXyGjjNf3K5wMYoSxmXcjAV86sfPefPh9Lidcu67ZbVrTnWCWSFDkp3AbRQnHJmFe",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "D4UAKrAzTAPgYUJnJAWzKqJxkoG7q6YRaXJspSsVgojq",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844165000,
+          "signature": "4fWa9iUfuLuGYomqTKqkCPReHjYMrxabgwbGzWNKsykvqXbnsH2GSEMTXkvNrpvGkyW9G7FdAj4dZug7bmssiRJD",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "G5fNgD5PLTBx3FUYqfo4PDeJJr6hHZVYVFCpkve5aMhH",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844164000,
+          "signature": "4pRgHFAZ7CerCMAZhvVvhE6wHj45sgNRp6532a37xHQLaFJ71sgQmxFEFm6E7V8q23ghKfu9AEPDDpNaRHYExQm7",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "37uAXHuWmXbtqyjGgNfWAAsMgncXQUT6pzptXxazNHpX",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844164000,
+          "signature": "X1yuAfjboJgvPRzNCC3LHvz1LkZ3xJcgxvj1jVScAnGAeGikpd7prfGQYHYvTDPEhUVSvSYJqzWBgcWq5EbxrL4",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "4P4dgid7QfUSwL5g5CFPGNF7cNez3mhfiMS5X4Yh34pJ",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844164000,
+          "signature": "3YYsK7GAaBaajdo9gc4rQXMiLGjUxuuR5thxbiBA7CkH9Vd7cBhuiyeWYfL9e7oJQc8XcM11t1BzeUWCaRLfaojZ",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "FaptDkpQv4JyoCBaj1qCbumArtPZGZrEdgeWnSGGNhi5",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844164000,
+          "signature": "5YH18BN4Z4mbZHXWUXR1UJvkMvLBAbUQRgxp67XqbdNGWFUtrBUrALmGTUxKcCUQwSDB3jBUeCScvT65mg7MrPsr",
+          "evidenceSignatures": []
+        },
+        {
+          "owner": "BC8othUXuU9r6ciKxJETkU7bGTJ3QFRBzNbGytwCwvSu",
+          "classification": "NO_KNOWN_LINK",
+          "firstPurchase": "UNKNOWN",
+          "buys": 1,
+          "lastAt": 1791844163000,
+          "signature": "5xJUvTSgWvcLHK4kQHRGLRq4e9nz32Sd7N4cRHoRSUXQ2W1QgJXTTAwgb8eJiaLQPZH5xCu7XkBcpixsa533jYFG",
+          "evidenceSignatures": []
+        }
+      ],
+      "scope": "up to 10000 stored supported buys in selected chain-time window; not all-chain buyers; issuer identity unverified"
+    }
+  ],
+  "latencies": {
+    "chainClockAheadSamples": 5,
+    "chainTimeMissingSamples": 0,
+    "durableQueue": {
+      "samples": 6,
+      "p50": 95,
+      "p95": 962,
+      "p99": 962
+    },
+    "schedulerQueue": {
+      "samples": 6,
+      "p50": 1,
+      "p95": 476,
+      "p99": 476
+    },
+    "requestRoundTrip": {
+      "samples": 6,
+      "p50": 308,
+      "p95": 614,
+      "p99": 614
+    },
+    "timeToHeaders": {
+      "samples": 6,
+      "p50": 273,
+      "p95": 612,
+      "p99": 612
+    },
+    "bodyDecode": {
+      "samples": 6,
+      "p50": 2,
+      "p95": 35,
+      "p99": 35
+    },
+    "chainToDecision": {
+      "samples": 3,
+      "p50": 826,
+      "p95": 2084,
+      "p99": 2084
+    },
+    "receive": {
+      "samples": 1,
+      "p50": 813,
+      "p95": 813,
+      "p99": 813
+    },
+    "rpc": {
+      "samples": 6,
+      "p50": 625,
+      "p95": 1271,
+      "p99": 1271
+    },
+    "parse": {
+      "samples": 6,
+      "p50": 1,
+      "p95": 2,
+      "p99": 2
+    },
+    "decision": {
+      "samples": 6,
+      "p50": 1,
+      "p95": 20,
+      "p99": 20
+    },
+    "endToEnd": {
+      "samples": 6,
+      "p50": 626,
+      "p95": 1271,
+      "p99": 1271
+    },
+    "signal": {
+      "samples": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null
+    },
+    "definition": "requestRoundTrip includes network + provider; provider processing cannot be isolated without trusted provider timing; old rows lack split metrics. receive uses second-resolution blockTime; other durations use local wall clock milliseconds; signal samples only actual PAPER entry/exit",
+    "window": 6
+  },
+  "provider": "Solana public",
+  "queue": 830,
+  "status": "partial observation"
+}

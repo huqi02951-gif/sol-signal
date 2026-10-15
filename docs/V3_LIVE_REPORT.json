@@ -1,0 +1,164 @@
+{
+  "at": 1792079781615,
+  "startedAt": 1792079162033,
+  "mode": "PAPER ONLY",
+  "accepted": false,
+  "activity": [
+    {
+      "mint": "4VXNQUEVq5BPHWAnKDrBN6zqqumKDVy6mYjvBtLipump",
+      "from": 1791993381615,
+      "to": 1792079781615,
+      "lastTradeAt": 1792079703000,
+      "tradeCount": 7,
+      "observedOwners": 1,
+      "knownRelated": 1,
+      "suspectedRelated": 0,
+      "noKnownLink": 0,
+      "verifiedExternal": null,
+      "verifiedFirst": 0,
+      "unknownFirst": 1,
+      "completeness": "PARTIAL",
+      "buyers": [
+        {
+          "owner": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+          "classification": "KNOWN_RELATED",
+          "firstPurchase": "UNKNOWN",
+          "buys": 7,
+          "lastAt": 1792079703000,
+          "signature": "4oTxKnMaM4zbW3g37VHhs1Z377kRRD2eJXvkJxwTgFzpLfE5n5VHGTnC7gaNHBkVnSxWNo65zgEnExmozdzjZjG2",
+          "evidenceSignatures": []
+        }
+      ],
+      "scope": "up to 10000 stored supported buys in selected chain-time window; not all-chain buyers; issuer identity unverified"
+    }
+  ],
+  "latencies": {
+    "chainClockAheadSamples": 5,
+    "chainTimeMissingSamples": 0,
+    "durableQueue": {
+      "samples": 6,
+      "p50": 95,
+      "p95": 962,
+      "p99": 962
+    },
+    "schedulerQueue": {
+      "samples": 6,
+      "p50": 1,
+      "p95": 476,
+      "p99": 476
+    },
+    "requestRoundTrip": {
+      "samples": 6,
+      "p50": 308,
+      "p95": 614,
+      "p99": 614
+    },
+    "timeToHeaders": {
+      "samples": 6,
+      "p50": 273,
+      "p95": 612,
+      "p99": 612
+    },
+    "bodyDecode": {
+      "samples": 6,
+      "p50": 2,
+      "p95": 35,
+      "p99": 35
+    },
+    "chainToDecision": {
+      "samples": 3,
+      "p50": 826,
+      "p95": 2084,
+      "p99": 2084
+    },
+    "receive": {
+      "samples": 1,
+      "p50": 813,
+      "p95": 813,
+      "p99": 813
+    },
+    "rpc": {
+      "samples": 6,
+      "p50": 625,
+      "p95": 1271,
+      "p99": 1271
+    },
+    "parse": {
+      "samples": 6,
+      "p50": 1,
+      "p95": 2,
+      "p99": 2
+    },
+    "decision": {
+      "samples": 6,
+      "p50": 1,
+      "p95": 20,
+      "p99": 20
+    },
+    "endToEnd": {
+      "samples": 6,
+      "p50": 626,
+      "p95": 1271,
+      "p99": 1271
+    },
+    "signal": {
+      "samples": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null
+    },
+    "definition": "requestRoundTrip includes network + provider; provider processing cannot be isolated without trusted provider timing; old rows lack split metrics. receive uses second-resolution blockTime; other durations use local wall clock milliseconds; signal samples only actual PAPER entry/exit",
+    "window": 6
+  },
+  "walletSamples": [
+    {
+      "alias": "A",
+      "address": "GNWkMRJeBgB2mpqdjcPxP7VJPwqo6jJELjeMDcWgbYkj",
+      "storedSampleBuys": 388,
+      "lastBuy": {
+        "signature": "5PDH8uqjpvcq5AorLh2LHSavDkK1BJ9Dw6GCgksGZg6WkQR1YFa8EkLCnNNVhGJBFc3vu9HACygDFFaoAuxngJ4k",
+        "mint": "4VXNQUEVq5BPHWAnKDrBN6zqqumKDVy6mYjvBtLipump",
+        "time": 1792079703000,
+        "lamports": "140132083",
+        "ingestion": "websocket"
+      }
+    },
+    {
+      "alias": "B",
+      "address": "AVxhoCCEjdTfYjNm5FkRHCNGARFgv4GaNACpteyHLhr7",
+      "storedSampleBuys": 0,
+      "lastBuy": null
+    },
+    {
+      "alias": "C",
+      "address": "DgXZpa31edzYTm4piLYTCeEyfUjreB4G7gLaJ3dh7Xyf",
+      "storedSampleBuys": 0,
+      "lastBuy": null
+    }
+  ],
+  "queues": {
+    "active": 830,
+    "deferred": 96986,
+    "oldestPendingAt": 1791808966819,
+    "alarm": "CONGESTED"
+  },
+  "subscriptions": 3,
+  "provider": "Solana public",
+  "reconciliation": {
+    "at": 1792079162070,
+    "status": "unavailable",
+    "reason": "independent RPC not configured",
+    "missRate": null
+  },
+  "modelCalls": 0,
+  "apiCostUsd": 0,
+  "limitations": [
+    "small real observation window; not long-term P50/P95/P99 acceptance",
+    "second-resolution blockTime can be ahead of receipt/decision; negative durations excluded and clock-ahead count shown",
+    "no complete external-token buy coverage",
+    "first purchase lifetime history and event-time USD producer missing",
+    "no independent reconciliation, no real PAPER closed loop",
+    "four-token benchmark is synthetic; paid adapters not credential-tested",
+    "backend remains local; public deployment is a dated read-only snapshot"
+  ]
+}

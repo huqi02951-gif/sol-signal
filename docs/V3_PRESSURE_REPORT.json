@@ -1,0 +1,31 @@
+{
+  "label": "SYNTHETIC four-token transport/dispatcher load; NOT mainnet latency",
+  "tokens": 4,
+  "totalEvents": 200,
+  "processed": 200,
+  "remaining": 0,
+  "perToken": [
+    {
+      "source": "pool0",
+      "processed": 50
+    },
+    {
+      "source": "pool1",
+      "processed": 50
+    },
+    {
+      "source": "pool2",
+      "processed": 50
+    },
+    {
+      "source": "pool3",
+      "processed": 50
+    }
+  ],
+  "maxTransportConcurrency": 2,
+  "simulatedNetworkMs": 3,
+  "startIntervalMs": 1,
+  "durationMs": 401.24150000000003,
+  "productionRequestIntervalMs": 500,
+  "acceptedForRealFourTokenLatency": false
+}
