@@ -18,7 +18,9 @@
     "history": "tsx scripts/history.ts",
     "soak": "tsx scripts/soak.ts",
     "pressure": "tsx scripts/pressure.ts",
-    "build:cloud-preview": "pnpm typecheck && VITE_CLOUD_PREVIEW=true pnpm --filter @sol/web exec vite build --outDir ../../deploy/cloudflare-preview/dist --emptyOutDir"
+    "build:cloud-preview": "pnpm typecheck && VITE_CLOUD_PREVIEW=true pnpm --filter @sol/web exec vite build --outDir ../../deploy/cloudflare-preview/dist --emptyOutDir",
+    "providers:compare": "tsx scripts/provider-compare.ts",
+    "pressure:v3": "tsx scripts/v3-pressure.ts"
   },
   "dependencies": {
     "zod": "^4.1.0",
